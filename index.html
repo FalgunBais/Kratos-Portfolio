@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Falgun Singh Bais | Gamified Pixel Portfolio</title>
+  <meta name="description" content="Explore the gamified pixel-art portfolio of Falgun Singh Bais — a full-stack developer's journey told as a retro game adventure.">
+  <meta name="keywords" content="Falgun Singh Bais, portfolio, developer, pixel art, gamified">
+  <meta name="author" content="Falgun Singh Bais">
+  <meta property="og:title" content="Falgun Singh Bais | Pixel Portfolio">
+  <meta property="og:description" content="A retro game-inspired developer portfolio">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- CRT Overlay -->
+  <div class="crt-overlay" aria-hidden="true"></div>
+
+  <!-- Starfield -->
+  <div class="starfield" aria-hidden="true"></div>
+
+  <!-- HUD Bar -->
+  <header class="hud-bar">
+    <span class="hud-name">FALGUN</span>
+    <div class="hud-hp">
+      <span class="hud-hp-label">HP</span>
+      <div class="hud-hp-track">
+        <div class="hud-hp-fill" id="hpFill"></div>
+      </div>
+    </div>
+    <span class="hud-score" id="hudScore">SCORE: 0000</span>
+  </header>
+
+  <!-- Level Path SVG -->
+  <svg class="level-path" id="levelPath" viewBox="0 0 880 3000" aria-hidden="true" preserveAspectRatio="none">
+    <path id="mainPath" d="M 440,40 C 440,200 150,300 150,500 S 730,700 730,900 S 150,1100 150,1300 S 730,1500 730,1700 S 150,1900 150,2100 S 730,2300 730,2500 S 440,2700 440,2900" fill="none" />
+  </svg>
+
+  <!-- Player Sprite -->
+  <div class="player-sprite" id="playerSprite" aria-hidden="true"></div>
+
+  <main id="main">
+    <!-- HERO / START SCREEN -->
+    <section id="hero" class="section hero-section is-visible">
+      <div class="hero-content">
+        <p class="hero-insert-coin">INSERT COIN TO START</p>
+        <h1 class="glitch-title" data-text="FALGUN SINGH BAIS">FALGUN SINGH BAIS</h1>
+        <div class="hero-subtitle">
+          <span id="typewriter"></span><span class="cursor">&nbsp;</span>
+        </div>
+        <div class="scroll-hint">
+          <span>▼ SCROLL TO PLAY ▼</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 01: EDUCATION / ORIGIN STORY -->
+    <section id="education" class="section level-section">
+      <div class="level-header">
+        <span class="level-number">LEVEL 01</span>
+        <h2>Origin Story</h2>
+      </div>
+      <div class="level-content">
+        <!-- Education Card 1 -->
+        <div class="edu-card">
+          <div class="edu-header">
+            <h3>B.Tech — Computer Science</h3>
+            <span class="edu-year">2020 – 2024</span>
+          </div>
+          <p class="edu-org">Indian Institute of Technology, Delhi</p>
+          <div class="bar-track"><div class="bar-fill" style="width: 85%"></div></div>
+          <p class="edu-score">GPA: 8.5 / 10.0</p>
+        </div>
+        <!-- Education Card 2 -->
+        <div class="edu-card">
+          <div class="edu-header">
+            <h3>Senior Secondary (XII)</h3>
+            <span class="edu-year">2018 – 2020</span>
+          </div>
+          <p class="edu-org">Delhi Public School, Bhopal</p>
+          <div class="bar-track"><div class="bar-fill" style="width: 95%"></div></div>
+          <p class="edu-score">SCORE: 95.4%</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 02: SKILLS / INVENTORY -->
+    <section id="skills" class="section level-section">
+      <div class="level-header">
+        <span class="level-number">LEVEL 02</span>
+        <h2>Inventory</h2>
+      </div>
+      <div class="level-content">
+        <div class="inv-grid">
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🌐</span><span class="inv-name">HTML5</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🎨</span><span class="inv-name">CSS3</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">⚡</span><span class="inv-name">JavaScript</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🔷</span><span class="inv-name">TypeScript</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">⚛️</span><span class="inv-name">React</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🟢</span><span class="inv-name">Node.js</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🐍</span><span class="inv-name">Python</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🍃</span><span class="inv-name">MongoDB</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🐳</span><span class="inv-name">Docker</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">☁️</span><span class="inv-name">AWS</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">📦</span><span class="inv-name">Git</span></div>
+          <div class="inv-slot" tabindex="0"><span class="inv-icon">🐧</span><span class="inv-name">Linux</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 03: CERTIFICATIONS / TROPHY CASE -->
+    <section id="certifications" class="section level-section">
+      <div class="level-header">
+        <span class="level-number">LEVEL 03</span>
+        <h2>Trophy Case</h2>
+      </div>
+      <div class="level-content">
+        <div class="trophy-grid">
+          <div class="trophy-card" tabindex="0">
+            <div class="trophy-shine"></div>
+            <div class="trophy-icon">🏆</div>
+            <h3>AWS Cloud Practitioner</h3>
+            <p>Amazon Web Services</p>
+          </div>
+          <div class="trophy-card" tabindex="0">
+            <div class="trophy-shine"></div>
+            <div class="trophy-icon">📊</div>
+            <h3>Data Analytics</h3>
+            <p>Google</p>
+          </div>
+          <div class="trophy-card" tabindex="0">
+            <div class="trophy-shine"></div>
+            <div class="trophy-icon">💻</div>
+            <h3>Front-End Developer</h3>
+            <p>Meta</p>
+          </div>
+          <div class="trophy-card" tabindex="0">
+            <div class="trophy-shine"></div>
+            <div class="trophy-icon">🧩</div>
+            <h3>Problem Solving</h3>
+            <p>HackerRank — Gold</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 04: PROJECTS / BOSS BATTLES -->
+    <section id="projects" class="section level-section">
+      <div class="level-header">
+        <span class="level-number">LEVEL 04</span>
+        <h2>Boss Battles</h2>
+      </div>
+      <div class="level-content">
+        <div class="boss-grid">
+          <!-- Boss 1 -->
+          <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for NexusChat project details">
+            <div class="boss-card-inner">
+              <div class="boss-card-front">
+                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <h3>NexusChat</h3>
+                <span class="boss-tech">React · Node.js · Socket.io</span>
+                <p>Real-time AI-powered chat platform</p>
+              </div>
+              <div class="boss-card-back">
+                <h3>Battle Log</h3>
+                <p>A full-stack real-time messaging platform with AI-driven smart replies and conversation summaries.</p>
+                <ul>
+                  <li>WebSocket-based real-time messaging</li>
+                  <li>AI-powered reply suggestions</li>
+                  <li>End-to-end encryption</li>
+                  <li>10k+ concurrent users supported</li>
+                </ul>
+                <div class="boss-links">
+                  <a href="#" class="btn-pixel btn-cyan">GitHub</a>
+                  <a href="#" class="btn-pixel btn-magenta">Live Demo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Boss 2 -->
+          <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for CloudForge project details">
+            <div class="boss-card-inner">
+              <div class="boss-card-front">
+                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <h3>CloudForge</h3>
+                <span class="boss-tech">Python · AWS · Docker</span>
+                <p>One-click cloud deployment engine</p>
+              </div>
+              <div class="boss-card-back">
+                <h3>Battle Log</h3>
+                <p>An automated cloud infrastructure provisioning tool that deploys containerized apps with a single command.</p>
+                <ul>
+                  <li>Terraform-based infrastructure as code</li>
+                  <li>Multi-cloud support (AWS, GCP)</li>
+                  <li>CI/CD pipeline integration</li>
+                  <li>99.9% uptime SLA</li>
+                </ul>
+                <div class="boss-links">
+                  <a href="#" class="btn-pixel btn-cyan">GitHub</a>
+                  <a href="#" class="btn-pixel btn-magenta">Live Demo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Boss 3 -->
+          <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for PixelMart project details">
+            <div class="boss-card-inner">
+              <div class="boss-card-front">
+                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <h3>PixelMart</h3>
+                <span class="boss-tech">Next.js · MongoDB · Stripe</span>
+                <p>Retro-themed e-commerce platform</p>
+              </div>
+              <div class="boss-card-back">
+                <h3>Battle Log</h3>
+                <p>A pixel-art themed e-commerce marketplace with Stripe integration, real-time inventory tracking, and an admin dashboard.</p>
+                <ul>
+                  <li>SSR with Next.js for SEO</li>
+                  <li>Stripe payment gateway</li>
+                  <li>Real-time stock management</li>
+                  <li>Admin analytics dashboard</li>
+                </ul>
+                <div class="boss-links">
+                  <a href="#" class="btn-pixel btn-cyan">GitHub</a>
+                  <a href="#" class="btn-pixel btn-magenta">Live Demo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Boss 4 -->
+          <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for DataVault project details">
+            <div class="boss-card-inner">
+              <div class="boss-card-front">
+                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <h3>DataVault</h3>
+                <span class="boss-tech">D3.js · Python · PostgreSQL</span>
+                <p>Interactive data visualization hub</p>
+              </div>
+              <div class="boss-card-back">
+                <h3>Battle Log</h3>
+                <p>A data visualization dashboard with interactive charts, real-time data streaming, and customizable widgets.</p>
+                <ul>
+                  <li>20+ chart types with D3.js</li>
+                  <li>Real-time WebSocket data feeds</li>
+                  <li>Drag-and-drop dashboard builder</li>
+                  <li>Export to PDF and CSV</li>
+                </ul>
+                <div class="boss-links">
+                  <a href="#" class="btn-pixel btn-cyan">GitHub</a>
+                  <a href="#" class="btn-pixel btn-magenta">Live Demo</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 05: EXPERIENCE / QUEST LOG -->
+    <section id="experience" class="section level-section">
+      <div class="level-header">
+        <span class="level-number">LEVEL 05</span>
+        <h2>Quest Log</h2>
+      </div>
+      <div class="level-content">
+        <div class="quest-list">
+          <div class="quest-item">
+            <span class="quest-status">✓</span>
+            <div class="quest-details">
+              <h3>Software Engineer Intern</h3>
+              <span class="quest-org">Microsoft — Jun 2023 to Aug 2023</span>
+              <p>Built scalable microservices for Azure cloud platform. Optimized API response times by 40% through caching strategies and database query optimization.</p>
+            </div>
+          </div>
+          <div class="quest-item">
+            <span class="quest-status">►</span>
+            <div class="quest-details">
+              <h3>Open Source Contributor</h3>
+              <span class="quest-org">Various Projects — 2022 to Present</span>
+              <p>Active contributor to React, Node.js, and VS Code. Submitted 50+ pull requests across open source projects with a 90% merge rate.</p>
+            </div>
+          </div>
+          <div class="quest-item">
+            <span class="quest-status">✓</span>
+            <div class="quest-details">
+              <h3>Teaching Assistant</h3>
+              <span class="quest-org">IIT Delhi — Aug 2023 to Dec 2023</span>
+              <p>Assisted in Data Structures & Algorithms course. Conducted lab sessions for 120+ students and designed programming assignments.</p>
+            </div>
+          </div>
+          <div class="quest-item">
+            <span class="quest-status">✓</span>
+            <div class="quest-details">
+              <h3>Hackathon Champion</h3>
+              <span class="quest-org">Smart India Hackathon — Dec 2023</span>
+              <p>Led a team of 6 to build an AI-powered healthcare diagnostic tool. Won first place among 500+ competing teams nationally.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL LEVEL: CONTACT / SAVE POINT -->
+    <section id="contact" class="section level-section save-section">
+      <div class="level-header">
+        <span class="level-number">FINAL LEVEL</span>
+        <h2>Save Point</h2>
+      </div>
+      <div class="level-content save-content">
+        <p class="save-text">Quest complete! Save your progress and connect for the next adventure.</p>
+        <div class="contact-links">
+          <a href="https://github.com/falgunbais" class="btn-pixel btn-cyan" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://linkedin.com/in/falgunbais" class="btn-pixel btn-magenta" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="mailto:falgun.bais@email.com" class="btn-pixel btn-gold">Email</a>
+        </div>
+        <p class="save-footer">© 2024 Falgun Singh Bais — Game Over? Never.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
