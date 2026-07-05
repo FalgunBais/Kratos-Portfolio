@@ -71,7 +71,6 @@ body {
       transparent 2px
     ),
     radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.5) 100%);
-  mix-blend-mode: multiply;
 }
 
 .starfield {

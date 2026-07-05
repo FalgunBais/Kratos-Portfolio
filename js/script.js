@@ -87,6 +87,20 @@ document.addEventListener("DOMContentLoaded", () => {
   let cachedSvgPageY = 0;
   let cachedDocHeight = 0;
 
+  // Cached coordinate points for pre-sampled path lookups
+  let cachedPoints = [];
+  const NUM_SAMPLES = 500;
+
+  const precomputePoints = () => {
+    cachedPoints = [];
+    if (!mainPath || !cachedTotalLength) return;
+    for (let i = 0; i <= NUM_SAMPLES; i++) {
+      const p = i / NUM_SAMPLES;
+      const point = mainPath.getPointAtLength(p * cachedTotalLength);
+      cachedPoints.push({ x: point.x, y: point.y });
+    }
+  };
+
   const generatePath = (docHeight) => {
     const nodes = [
       { x: 440, y: 0 },
@@ -134,6 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
     cachedSvgPageY = svgRect.top + window.scrollY;
     
     cachedDocHeight = docHeight - window.innerHeight;
+
+    // Pre-sample points along the newly calculated path
+    precomputePoints();
   };
 
   updatePathLayout();
@@ -154,8 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const progress = cachedDocHeight > 0 ? Math.min(scrollTop / cachedDocHeight, 1) : 0;
       const scrollPercent = progress * 100;
 
-      if (mainPath && playerSpriteContainer) {
-        const point = mainPath.getPointAtLength(progress * cachedTotalLength);
+      if (cachedPoints.length > 0 && playerSpriteContainer) {
+        const sampleIndex = Math.round(progress * NUM_SAMPLES);
+        const point = cachedPoints[Math.min(sampleIndex, NUM_SAMPLES)] || cachedPoints[0];
 
         const screenX = cachedSvgPageX + point.x * cachedScaleX;
         const screenY = cachedSvgPageY + point.y * cachedScaleY;
