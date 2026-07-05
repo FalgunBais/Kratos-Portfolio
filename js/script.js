@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   ).matches;
 
   const phrases = [
-    "Full-Stack Developer",
-    "Open Source Enthusiast",
-    "Problem Solver",
-    "Code Warrior",
+    "B.Tech CS Student",
+    "AWS Certified Architect",
+    "AI & Cloud Explorer",
+    "Cybersecurity Competitor",
   ];
 
   const typewriterEl = document.getElementById("typewriter");
