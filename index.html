@@ -42,8 +42,10 @@
     <path id="mainPath" d="M 440,40 C 440,200 150,300 150,500 S 730,700 730,900 S 150,1100 150,1300 S 730,1500 730,1700 S 150,1900 150,2100 S 730,2300 730,2500 S 440,2700 440,2900" fill="none" />
   </svg>
 
-  <!-- Player Sprite -->
-  <div class="player-sprite" id="playerSprite" aria-hidden="true"></div>
+  <!-- Player Sprite Container for GPU-accelerated positioning -->
+  <div id="playerSpriteContainer" style="position: absolute; top: 0; left: 0; pointer-events: none; z-index: 10; will-change: transform;">
+    <div class="player-sprite" id="playerSprite" aria-hidden="true"></div>
+  </div>
 
   <main id="main">
     <!-- HERO / START SCREEN -->

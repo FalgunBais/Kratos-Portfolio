@@ -73,10 +73,19 @@ document.addEventListener("DOMContentLoaded", () => {
   sections.forEach((section) => revealObserver.observe(section));
 
   const playerSprite = document.getElementById("playerSprite");
+  const playerSpriteContainer = document.getElementById("playerSpriteContainer");
   const levelPathSVG = document.getElementById("levelPath");
   const mainPath = document.getElementById("mainPath");
 
   const SVG_WIDTH = 880;
+
+  // Cached layout dimensions to eliminate scroll-time DOM queries
+  let cachedTotalLength = 0;
+  let cachedScaleX = 1;
+  let cachedScaleY = 1;
+  let cachedSvgPageX = 0;
+  let cachedSvgPageY = 0;
+  let cachedDocHeight = 0;
 
   const generatePath = (docHeight) => {
     const nodes = [
@@ -111,6 +120,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     levelPathSVG.setAttribute("viewBox", `0 0 ${SVG_WIDTH} ${docHeight}`);
     mainPath.setAttribute("d", generatePath(docHeight));
+
+    // Cache computations to avoid layout thrashing
+    cachedTotalLength = mainPath.getTotalLength();
+    
+    const svgRect = levelPathSVG.getBoundingClientRect();
+    const viewBox = levelPathSVG.viewBox.baseVal;
+    
+    cachedScaleX = svgRect.width / viewBox.width;
+    cachedScaleY = svgRect.height / viewBox.height;
+    
+    cachedSvgPageX = svgRect.left + window.scrollX;
+    cachedSvgPageY = svgRect.top + window.scrollY;
+    
+    cachedDocHeight = docHeight - window.innerHeight;
   };
 
   updatePathLayout();
@@ -127,32 +150,17 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(() => {
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
-      const docHeight =
-        Math.max(
-          document.body.scrollHeight,
-          document.documentElement.scrollHeight
-        ) - window.innerHeight;
 
-      const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+      const progress = cachedDocHeight > 0 ? Math.min(scrollTop / cachedDocHeight, 1) : 0;
       const scrollPercent = progress * 100;
 
-      if (mainPath && playerSprite) {
-        const totalLength = mainPath.getTotalLength();
-        const point = mainPath.getPointAtLength(progress * totalLength);
+      if (mainPath && playerSpriteContainer) {
+        const point = mainPath.getPointAtLength(progress * cachedTotalLength);
 
-        const svgRect = levelPathSVG.getBoundingClientRect();
-        const svgWidth = svgRect.width;
-        const svgHeight = svgRect.height;
-        const viewBox = levelPathSVG.viewBox.baseVal;
+        const screenX = cachedSvgPageX + point.x * cachedScaleX;
+        const screenY = cachedSvgPageY + point.y * cachedScaleY;
 
-        const scaleX = svgWidth / viewBox.width;
-        const scaleY = svgHeight / viewBox.height;
-
-        const screenX = svgRect.left + point.x * scaleX + window.scrollX;
-        const screenY = svgRect.top + point.y * scaleY + window.scrollY;
-
-        playerSprite.style.left = `${screenX}px`;
-        playerSprite.style.top = `${screenY}px`;
+        playerSpriteContainer.style.transform = `translate3d(${screenX}px, ${screenY}px, 0)`;
       }
 
       if (hpFill) {
@@ -171,6 +179,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("load", () => {
+    updatePathLayout();
+    onScroll();
+  });
   onScroll();
 
   let resizeTimer;

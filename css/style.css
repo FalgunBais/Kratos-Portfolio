@@ -76,7 +76,9 @@ body {
 
 .starfield {
   position: fixed;
-  inset: 0;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
   z-index: 0;
   background:
     radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.8), transparent),
@@ -97,19 +99,22 @@ body {
     radial-gradient(1px 1px at 95% 90%, rgba(255, 255, 255, 0.6), transparent),
     radial-gradient(1px 1px at 20% 5%, rgba(255, 255, 255, 0.5), transparent),
     radial-gradient(1px 1px at 65% 30%, rgba(255, 255, 255, 0.7), transparent);
-  background-size: 200% 200%;
-  animation: starDrift 120s linear infinite;
+  background-size: 100% 100%;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  animation: starDriftGPU 120s linear infinite;
 }
 
-@keyframes starDrift {
+@keyframes starDriftGPU {
   0% {
-    background-position: 0% 0%;
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    background-position: 60% 40%;
+    transform: translate3d(5%, 5%, 0);
   }
   100% {
-    background-position: 0% 0%;
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -195,7 +200,7 @@ body {
 }
 
 .player-sprite {
-  position: absolute;
+  position: relative;
   width: 24px;
   height: 32px;
   z-index: 10;
