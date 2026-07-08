@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Falgun Singh Bais | Gamified Pixel Portfolio</title>
-  <meta name="description" content="Explore the gamified pixel-art portfolio of Falgun Singh Bais — a full-stack developer's journey told as a retro game adventure.">
-  <meta name="keywords" content="Falgun Singh Bais, portfolio, developer, pixel art, gamified">
+  <title>Falgun Singh Bais | Vice City Portfolio</title>
+  <meta name="description" content="Explore the GTA 6 and Vice City inspired synthwave portfolio of Falgun Singh Bais.">
+  <meta name="keywords" content="Falgun Singh Bais, portfolio, developer, gta 6, vice city, synthwave">
   <meta name="author" content="Falgun Singh Bais">
-  <meta property="og:title" content="Falgun Singh Bais | Pixel Portfolio">
-  <meta property="og:description" content="A retro game-inspired developer portfolio">
+  <meta property="og:title" content="Falgun Singh Bais | Vice City Portfolio">
+  <meta property="og:description" content="A GTA 6 and Vice City inspired synthwave developer portfolio">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Pacifico&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -27,14 +27,26 @@
 
   <!-- HUD Bar -->
   <header class="hud-bar">
-    <span class="hud-name">FALGUN</span>
-    <div class="hud-hp">
-      <span class="hud-hp-label">HP</span>
-      <div class="hud-hp-track">
-        <div class="hud-hp-fill" id="hpFill"></div>
+    <div class="hud-left">
+      <span class="hud-name">FALGUN</span>
+    </div>
+    <div class="hud-status">
+      <div class="hud-hp">
+        <span class="hud-hp-label">HP</span>
+        <div class="hud-hp-track">
+          <div class="hud-hp-fill" id="hpFill"></div>
+        </div>
+      </div>
+      <div class="hud-armor">
+        <span class="hud-armor-label">ARMOR</span>
+        <div class="hud-armor-track">
+          <div class="hud-armor-fill" id="armorFill"></div>
+        </div>
       </div>
     </div>
-    <span class="hud-score" id="hudScore">SCORE: 0000</span>
+    <div class="hud-wanted" id="hudWanted" aria-label="Wanted level: 0 stars">
+      <span class="star">☆</span><span class="star">☆</span><span class="star">☆</span><span class="star">☆</span><span class="star">☆</span>
+    </div>
   </header>
 
   <!-- Level Path SVG -->
@@ -50,14 +62,16 @@
   <main id="main">
     <!-- HERO / START SCREEN -->
     <section id="hero" class="section hero-section is-visible">
+      <div class="gta-vi-logo" aria-hidden="true">VI</div>
       <div class="hero-content">
-        <p class="hero-insert-coin">INSERT COIN TO START</p>
+        <p class="hero-insert-coin">WELCOME TO VICE CITY</p>
         <h1 class="glitch-title" data-text="FALGUN SINGH BAIS">FALGUN SINGH BAIS</h1>
+        <p class="vice-city-script">Vice City</p>
         <div class="hero-subtitle">
           <span id="typewriter"></span><span class="cursor">&nbsp;</span>
         </div>
         <div class="scroll-hint">
-          <span>▼ SCROLL TO PLAY ▼</span>
+          <span>▼ SCROLL TO START MISSION ▼</span>
         </div>
       </div>
     </section>
@@ -65,13 +79,13 @@
     <!-- LEVEL 01: EDUCATION / ORIGIN STORY -->
     <section id="education" class="section level-section">
       <div class="level-header">
-        <span class="level-number">LEVEL 01</span>
-        <h2>Origin Story</h2>
+        <span class="level-number">MISSION 01</span>
+        <h2>The Debut</h2>
       </div>
       <div class="level-content">
         <!-- Professional Summary Bio Panel -->
         <div class="bio-panel">
-          <div class="bio-header">CHARACTER BIO</div>
+          <div class="bio-header">PLAYER BIO</div>
           <p class="bio-text" style="margin-bottom: 20px;">
             B.Tech Computer Science student at VIT Amaravati with a strong foundation in cloud computing, artificial intelligence, and cybersecurity. AWS Cloud Architecture certified, with hands-on exposure to AI-driven systems, cloud deployments, and competitive hackathons. Adept at translating academic knowledge into functional, real-world technical projects.
           </p>
@@ -117,8 +131,8 @@
     <!-- LEVEL 02: SKILLS / INVENTORY -->
     <section id="skills" class="section level-section">
       <div class="level-header">
-        <span class="level-number">LEVEL 02</span>
-        <h2>Inventory</h2>
+        <span class="level-number">WEAPONS WHEEL</span>
+        <h2>Skills Inventory</h2>
       </div>
       <div class="level-content">
         <div class="inv-grid">
@@ -142,8 +156,8 @@
     <!-- LEVEL 03: CERTIFICATIONS / TROPHY CASE -->
     <section id="certifications" class="section level-section">
       <div class="level-header">
-        <span class="level-number">LEVEL 03</span>
-        <h2>Trophy Case</h2>
+        <span class="level-number">ACHIEVEMENTS</span>
+        <h2>Trophies Unlocked</h2>
       </div>
       <div class="level-content">
         <div class="trophy-grid">
@@ -178,8 +192,8 @@
     <!-- LEVEL 04: PROJECTS / BOSS BATTLES -->
     <section id="projects" class="section level-section">
       <div class="level-header">
-        <span class="level-number">LEVEL 04</span>
-        <h2>Boss Battles</h2>
+        <span class="level-number">HEISTS</span>
+        <h2>Active Heists</h2>
       </div>
       <div class="level-content">
         <div class="boss-grid">
@@ -187,13 +201,17 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for Soil Nutrient Recommendation System project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <div class="heist-header">HEIST PAYOUT</div>
+                <div class="heist-payout">$1,250,000</div>
+                <div class="heist-wanted" aria-label="Heist difficulty: 3 stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span><span class="star inactive">☆</span>
+                </div>
                 <h3>NutriSoil AI</h3>
                 <span class="boss-tech">Python · Machine Learning</span>
                 <p>AI soil analysis for optimal crop yield</p>
               </div>
               <div class="boss-card-back">
-                <h3>Battle Log</h3>
+                <h3>Heist Plan</h3>
                 <p>A machine learning tool that analyzes soil composition to recommend optimal nutrients for improved crop yield.</p>
                 <ul>
                   <li>Custom ML recommendation model</li>
@@ -212,13 +230,17 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for AI Product Decision Hub project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <div class="heist-header">HEIST PAYOUT</div>
+                <div class="heist-payout">$980,000</div>
+                <div class="heist-wanted" aria-label="Heist difficulty: 2 stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span><span class="star inactive">☆</span><span class="star inactive">☆</span>
+                </div>
                 <h3>AI Decision Hub</h3>
                 <span class="boss-tech">Python · Artificial Intelligence</span>
                 <p>Intelligent product-ranking system</p>
               </div>
               <div class="boss-card-back">
-                <h3>Battle Log</h3>
+                <h3>Heist Plan</h3>
                 <p>Engineered an intelligent product-ranking system to support data-driven decision-making.</p>
                 <ul>
                   <li>Smart product comparison matrices</li>
@@ -237,13 +259,17 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for AWS Task Manager project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <div class="heist-header">HEIST PAYOUT</div>
+                <div class="heist-payout">$2,100,000</div>
+                <div class="heist-wanted" aria-label="Heist difficulty: 4 stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span>
+                </div>
                 <h3>AWS Task Manager</h3>
                 <span class="boss-tech">AWS · EC2 · IAM · Node.js</span>
                 <p>Cloud-hosted task manager app</p>
               </div>
               <div class="boss-card-back">
-                <h3>Battle Log</h3>
+                <h3>Heist Plan</h3>
                 <p>Deployed a task management web application on AWS, using EC2 for hosting and IAM for access control.</p>
                 <ul>
                   <li>AWS EC2 instance hosting</li>
@@ -262,13 +288,17 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for Threat Log Analyzer project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="boss-hp-bar"><div class="boss-hp-fill"></div></div>
+                <div class="heist-header">HEIST PAYOUT</div>
+                <div class="heist-payout">$1,650,000</div>
+                <div class="heist-wanted" aria-label="Heist difficulty: 3 stars">
+                  <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span><span class="star inactive">☆</span>
+                </div>
                 <h3>Log Threat Anal.</h3>
                 <span class="boss-tech">Python · Cybersecurity</span>
                 <p>Detects suspicious login patterns</p>
               </div>
               <div class="boss-card-back">
-                <h3>Battle Log</h3>
+                <h3>Heist Plan</h3>
                 <p>Developed a Python-based tool to detect suspicious login patterns and flag potential security threats.</p>
                 <ul>
                   <li>Real-time log scraping & analysis</li>
@@ -290,14 +320,15 @@
     <!-- LEVEL 05: EXPERIENCE / QUEST LOG -->
     <section id="experience" class="section level-section">
       <div class="level-header">
-        <span class="level-number">LEVEL 05</span>
-        <h2>Quest Log</h2>
+        <span class="level-number">MISSION LOG</span>
+        <h2>Completed Missions</h2>
       </div>
       <div class="level-content">
         <div class="quest-list">
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
+              <div class="mission-passed-stamp">PASSED</div>
               <h3>Hackathon Competitor</h3>
               <span class="quest-org">Competitive Hackathon — 5th Place</span>
               <p>Secured 5th place in a competitive hackathon by developing innovative solutions under tight deadlines.</p>
@@ -306,6 +337,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
+              <div class="mission-passed-stamp">PASSED</div>
               <h3>CTF Cybersecurity Player</h3>
               <span class="quest-org">Capture The Flag Competitions</span>
               <p>Competed in multiple Capture The Flag (CTF) cybersecurity competitions, tackling cryptography, reverse engineering, and log analysis challenges.</p>
@@ -314,6 +346,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
+              <div class="mission-passed-stamp">PASSED</div>
               <h3>Workshop Attendee</h3>
               <span class="quest-org">GDG Hyderabad 2025 AI Agents Workshop</span>
               <p>Attended the developer workshop focused on autonomous AI agents, multi-agent frameworks, and advanced agentic architectures.</p>
@@ -322,6 +355,7 @@
           <div class="quest-item">
             <span class="quest-status">►</span>
             <div class="quest-details">
+              <div class="mission-passed-stamp ongoing">ACTIVE</div>
               <h3>Early-Stage Contributor</h3>
               <span class="quest-org">Paddavi Startup</span>
               <p>Contributed to Paddavi, an early-stage startup, gaining hands-on startup experience and business workflows.</p>
@@ -330,6 +364,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
+              <div class="mission-passed-stamp">PASSED</div>
               <h3>Marketing & Design Co-Lead</h3>
               <span class="quest-org">Gaming Club</span>
               <p>Co-led marketing campaigns and design initiatives, increasing event attendance and player engagement.</p>
@@ -338,6 +373,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
+              <div class="mission-passed-stamp">PASSED</div>
               <h3>Co-Curricular Enthusiast</h3>
               <span class="quest-org">Athletics & Performing Arts</span>
               <p>Pursued co-curricular interests including swimming, badminton, athletics, dance, and singing.</p>
@@ -350,11 +386,11 @@
     <!-- FINAL LEVEL: CONTACT / SAVE POINT -->
     <section id="contact" class="section level-section save-section">
       <div class="level-header">
-        <span class="level-number">FINAL LEVEL</span>
-        <h2>Save Point</h2>
+        <span class="level-number">SAFEHOUSE</span>
+        <h2>Establish Contact</h2>
       </div>
       <div class="level-content save-content">
-        <p class="save-text">Quest complete! Save your progress and connect for the next adventure.</p>
+        <p class="save-text">Mission Complete! Visit the safehouse to save your progress and connect for the next heist.</p>
         <p class="save-text" style="font-size: 18px; color: var(--text-dim); margin-top: -16px; margin-bottom: 32px;">
           LOCATION: KOTA, RAJASTHAN
         </p>

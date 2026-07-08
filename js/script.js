@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   ).matches;
 
   const phrases = [
-    "B.Tech CS Student",
-    "AWS Certified Architect",
-    "AI & Cloud Explorer",
-    "Cybersecurity Competitor",
+    "B.Tech CS Student in Vice City",
+    "AWS Certified Heist Architect",
+    "AI & Cloud Exploits Specialist",
+    "Cybersecurity wanted star level 5",
   ];
 
   const typewriterEl = document.getElementById("typewriter");
@@ -156,7 +156,7 @@ document.addEventListener("DOMContentLoaded", () => {
   updatePathLayout();
 
   const hpFill = document.getElementById("hpFill");
-  const hudScore = document.getElementById("hudScore");
+  const armorFill = document.getElementById("armorFill");
 
   let ticking = false;
 
@@ -185,11 +185,30 @@ document.addEventListener("DOMContentLoaded", () => {
         hpFill.style.width = `${scrollPercent}%`;
       }
 
-      if (hudScore) {
-        const score = Math.floor(progress * 99.99 * 100)
-          .toString()
-          .padStart(4, "0");
-        hudScore.textContent = `SCORE: ${score}`;
+      // Decrement armor slightly as progress increases to give a dynamic survival feeling
+      if (armorFill) {
+        armorFill.style.width = `${Math.max(75 - scrollPercent * 0.4, 15)}%`;
+      }
+
+      // Calculate wanted level stars
+      const wantedContainer = document.getElementById("hudWanted");
+      if (wantedContainer) {
+        const starCount = Math.min(Math.floor(progress * 5) + 1, 5);
+        wantedContainer.setAttribute("aria-label", `Wanted level: ${starCount} stars`);
+
+        const stars = wantedContainer.querySelectorAll(".star");
+        stars.forEach((star, index) => {
+          if (index < starCount) {
+            star.classList.add("active");
+            if (index === starCount - 1) {
+              star.classList.add("blink");
+            } else {
+              star.classList.remove("blink");
+            }
+          } else {
+            star.classList.remove("active", "blink");
+          }
+        });
       }
 
       ticking = false;
