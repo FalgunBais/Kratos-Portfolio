@@ -329,7 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
       terminalInput.focus();
     });
 
-    const question = "> what brings you here gamer ";
+    const question = "> WHAT BRINGS YOU HERE GAMER? ";
     let charIdx = 0;
 
     const typeDialogue = () => {
