@@ -16,6 +16,27 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <!-- Hacker Intro Terminal Gate -->
+  <div class="terminal-gate" id="terminalGate">
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">FALGUN_NET // SECURE_PORTAL</span>
+      </div>
+      <div class="terminal-body" id="terminalBody">
+        <div class="terminal-line text-dim">SYSTEM INITIALIZING...</div>
+        <div class="terminal-line text-dim">CONNECTED TO FALGUN_NET v6.0</div>
+        <div class="terminal-line" id="terminalDialogue"></div>
+      </div>
+      <div class="terminal-input-line" id="terminalInputLine" style="display: none;">
+        <span class="terminal-prompt">visitor@falgun_net:~$</span>
+        <input type="text" id="terminalInput" autofocus autocomplete="off" aria-label="Type your response to enter">
+      </div>
+    </div>
+  </div>
+
   <!-- Skip Link -->
   <a href="#main" class="skip-link">Skip to main content</a>
 

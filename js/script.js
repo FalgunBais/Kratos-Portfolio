@@ -316,4 +316,63 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // Hacker Terminal Intro Gate logic
+  const terminalGate = document.getElementById("terminalGate");
+  const terminalDialogue = document.getElementById("terminalDialogue");
+  const terminalInputLine = document.getElementById("terminalInputLine");
+  const terminalInput = document.getElementById("terminalInput");
+  const terminalBody = document.getElementById("terminalBody");
+
+  if (terminalGate && terminalDialogue && terminalInputLine && terminalInput) {
+    terminalGate.addEventListener("click", () => {
+      terminalInput.focus();
+    });
+
+    const question = "> what brings you here gamer ";
+    let charIdx = 0;
+
+    const typeDialogue = () => {
+      if (charIdx < question.length) {
+        terminalDialogue.textContent += question.charAt(charIdx);
+        charIdx++;
+        setTimeout(typeDialogue, 60);
+      } else {
+        terminalInputLine.style.display = "flex";
+        terminalInput.focus();
+      }
+    };
+
+    setTimeout(typeDialogue, 800);
+
+    terminalInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const val = terminalInput.value.trim();
+        if (!val) return;
+
+        terminalInputLine.style.display = "none";
+
+        const userLine = document.createElement("div");
+        userLine.className = "terminal-line user-entered";
+        userLine.textContent = `visitor@falgun_net:~$ ${val}`;
+        terminalBody.appendChild(userLine);
+        terminalBody.scrollTop = terminalBody.scrollHeight;
+
+        setTimeout(() => {
+          const sysLine = document.createElement("div");
+          sysLine.className = "terminal-line";
+          sysLine.textContent = "> ACCESS GRANTED. LINKING PORTFOLIO...";
+          terminalBody.appendChild(sysLine);
+          terminalBody.scrollTop = terminalBody.scrollHeight;
+
+          setTimeout(() => {
+            terminalGate.classList.add("fade-out");
+            setTimeout(() => {
+              terminalGate.style.display = "none";
+            }, 800);
+          }, 1000);
+        }, 500);
+      }
+    });
+  }
 });

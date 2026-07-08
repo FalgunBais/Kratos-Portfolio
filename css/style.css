@@ -1057,6 +1057,111 @@ body {
   color: var(--gold);
 }
 
+.terminal-gate {
+  position: fixed;
+  inset: 0;
+  background: #000000;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'VT323', monospace;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.terminal-gate.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.terminal-window {
+  background: #05020c;
+  border: 1px solid #33155e;
+  border-radius: 6px;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(57, 255, 20, 0.05);
+  overflow: hidden;
+}
+
+.terminal-header {
+  background: #0f0b1a;
+  padding: 10px 16px;
+  border-bottom: 1px solid #230f3e;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.terminal-dot.red { background: #ff5f56; }
+.terminal-dot.yellow { background: #ffbd2e; }
+.terminal-dot.green { background: #27c93f; }
+
+.terminal-title {
+  color: #69568b;
+  font-size: 13px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  margin-left: 10px;
+  letter-spacing: 1px;
+}
+
+.terminal-body {
+  padding: 20px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.terminal-line {
+  color: #39ff14;
+  font-size: 20px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  text-shadow: 0 0 5px rgba(57, 255, 20, 0.4);
+}
+
+.terminal-line.text-dim {
+  color: #1e8b0b;
+}
+
+.terminal-line.user-entered {
+  color: var(--cyan);
+  text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
+}
+
+.terminal-input-line {
+  padding: 0 20px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.terminal-prompt {
+  color: var(--magenta);
+  font-size: 20px;
+  text-shadow: 0 0 5px rgba(255, 0, 127, 0.4);
+}
+
+#terminalInput {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #39ff14;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  flex: 1;
+  text-shadow: 0 0 5px rgba(57, 255, 20, 0.4);
+}
+
 .pixel-dialog-overlay {
   position: fixed;
   inset: 0;
