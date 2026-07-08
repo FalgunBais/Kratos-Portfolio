@@ -906,6 +906,36 @@ body {
   line-height: 1.6;
 }
 
+.hud-views {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: var(--bg-panel);
+  border: 2px solid var(--grid-line);
+  border-radius: 4px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
+  transition: border-color 0.3s ease;
+}
+
+.hud-views:hover {
+  border-color: var(--cyan);
+}
+
+.hud-views-label {
+  color: var(--cyan);
+}
+
+.hud-views-count {
+  color: var(--gold);
+}
+
 body.konami-active {
   filter: hue-rotate(90deg);
   transition: filter 0.5s ease;
@@ -1101,5 +1131,12 @@ body.konami-active {
     padding: 8px 16px;
     width: 100%;
     text-align: center;
+  }
+
+  .hud-views {
+    bottom: 12px;
+    right: 12px;
+    padding: 6px 10px;
+    font-size: 8px;
   }
 }

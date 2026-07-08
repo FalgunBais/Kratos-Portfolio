@@ -258,4 +258,13 @@ document.addEventListener("DOMContentLoaded", () => {
       konamiIndex = e.code === konamiSequence[0] ? 1 : 0;
     }
   });
+
+  // Profile Views counter logic using localStorage
+  const viewsCountEl = document.getElementById("viewsCount");
+  if (viewsCountEl) {
+    let views = parseInt(localStorage.getItem("profile_views") || "1337", 10);
+    views++;
+    localStorage.setItem("profile_views", views);
+    viewsCountEl.textContent = views.toString().padStart(4, "0");
+  }
 });
