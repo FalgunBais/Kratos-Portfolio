@@ -287,9 +287,9 @@ document.addEventListener("DOMContentLoaded", () => {
     viewsCountEl.textContent = views.toString().padStart(4, "0");
   }
 
-  // "luv you bhai" Keyboard Easter Egg logic
+  // "biryani" Keyboard Easter Egg logic
   let typedBuffer = "";
-  const easterEggTarget = "luv you bhai";
+  const easterEggTarget = "biryani";
 
   document.addEventListener("keydown", (e) => {
     if (e.key && e.key.length === 1) {
