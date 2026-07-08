@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ).matches;
 
   const phrases = [
-    "B.Tech CS Student in Vice City",
+    "B.Tech CS Student in Masti Ghar",
     "AWS Certified Heist Architect",
     "AI & Cloud Exploits Specialist",
     "Cybersecurity wanted star level 5",
