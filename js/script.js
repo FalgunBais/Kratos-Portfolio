@@ -267,4 +267,34 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("profile_views", views);
     viewsCountEl.textContent = views.toString().padStart(4, "0");
   }
+
+  // "luv you bhai" Keyboard Easter Egg logic
+  let typedBuffer = "";
+  const easterEggTarget = "luv you bhai";
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key && e.key.length === 1) {
+      typedBuffer += e.key.toLowerCase();
+      if (typedBuffer.length > easterEggTarget.length) {
+        typedBuffer = typedBuffer.substring(typedBuffer.length - easterEggTarget.length);
+      }
+      if (typedBuffer === easterEggTarget) {
+        const dialog = document.getElementById("bhaiEasterEggDialog");
+        if (dialog) {
+          dialog.style.display = "flex";
+        }
+        typedBuffer = "";
+      }
+    }
+  });
+
+  const closeBhaiDialogBtn = document.getElementById("closeBhaiDialogBtn");
+  if (closeBhaiDialogBtn) {
+    closeBhaiDialogBtn.addEventListener("click", () => {
+      const dialog = document.getElementById("bhaiEasterEggDialog");
+      if (dialog) {
+        dialog.style.display = "none";
+      }
+    });
+  }
 });
