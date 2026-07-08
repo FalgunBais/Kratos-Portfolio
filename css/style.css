@@ -1162,6 +1162,145 @@ body {
   text-shadow: 0 0 5px rgba(57, 255, 20, 0.4);
 }
 
+.gta-splash {
+  position: fixed;
+  inset: 0;
+  z-index: 99998;
+  background: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+}
+
+.gta-splash.slide-up {
+  transform: translateY(-100vh);
+}
+
+.gta-splash-bg {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse at center, transparent 40%, rgba(8, 4, 21, 0.8) 100%),
+    linear-gradient(135deg, #100624 0%, #30032e 45%, #6e003b 75%, #a14c00 100%);
+  background-size: 200% 200%;
+  animation: sunsetShift 10s ease infinite;
+  opacity: 0.85;
+}
+
+.gta-splash-content {
+  position: relative;
+  z-index: 2;
+  width: 90%;
+  max-width: 650px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.gta-splash-logo-container {
+  margin-bottom: 60px;
+  position: relative;
+}
+
+.gta-splash-vi {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 160px;
+  line-height: 1;
+  color: transparent;
+  background: linear-gradient(135deg, var(--magenta) 0%, var(--gold) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  opacity: 0.25;
+  filter: drop-shadow(0 0 30px rgba(255, 0, 127, 0.5));
+  user-select: none;
+}
+
+.gta-splash-title {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 42px;
+  color: var(--text-light);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: -60px;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.gta-splash-subtitle {
+  font-family: 'Pacifico', cursive;
+  font-size: 32px;
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan);
+  transform: rotate(-5deg);
+  margin-top: -5px;
+}
+
+.gta-splash-loader {
+  width: 100%;
+  max-width: 450px;
+  margin-bottom: 50px;
+}
+
+.gta-splash-bar-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.gta-splash-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--magenta) 0%, var(--gold) 100%);
+  box-shadow: 0 0 8px var(--magenta);
+  transition: width 0.1s linear;
+}
+
+.gta-splash-loading-text {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.gta-splash-tip-box {
+  background: rgba(8, 4, 21, 0.6);
+  border-left: 3px solid var(--magenta);
+  border-radius: 0 4px 4px 0;
+  padding: 16px 20px;
+  max-width: 480px;
+  width: 100%;
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.gta-splash-tip-label {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  color: var(--magenta);
+  display: block;
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+
+.gta-splash-tip-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.5;
+}
+
 .pixel-dialog-overlay {
   position: fixed;
   inset: 0;
@@ -1247,6 +1386,19 @@ body.konami-active {
 
   #main {
     padding-top: 48px;
+  }
+
+  .gta-splash-vi {
+    font-size: 110px;
+  }
+
+  .gta-splash-title {
+    font-size: 28px;
+    margin-top: -40px;
+  }
+
+  .gta-splash-subtitle {
+    font-size: 24px;
   }
 
   .section {
@@ -1444,5 +1596,30 @@ body.konami-active {
     right: 12px;
     padding: 6px 10px;
     font-size: 9px;
+  }
+
+  .gta-splash-vi {
+    font-size: 80px;
+  }
+
+  .gta-splash-title {
+    font-size: 20px;
+    margin-top: -30px;
+  }
+
+  .gta-splash-subtitle {
+    font-size: 18px;
+  }
+
+  .gta-splash-loader {
+    margin-bottom: 30px;
+  }
+
+  .gta-splash-tip-box {
+    padding: 12px 16px;
+  }
+
+  .gta-splash-tip-text {
+    font-size: 11px;
   }
 }

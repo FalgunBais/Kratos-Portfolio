@@ -358,19 +358,61 @@ document.addEventListener("DOMContentLoaded", () => {
         terminalBody.appendChild(userLine);
         terminalBody.scrollTop = terminalBody.scrollHeight;
 
+        // Print decryption progress
         setTimeout(() => {
-          const sysLine = document.createElement("div");
-          sysLine.className = "terminal-line";
-          sysLine.textContent = "> ACCESS GRANTED. LINKING PORTFOLIO...";
-          terminalBody.appendChild(sysLine);
+          const decryptLine = document.createElement("div");
+          decryptLine.className = "terminal-line";
+          decryptLine.textContent = "> DE-ENCRYPTING DATA: [████████████████████] 100%";
+          terminalBody.appendChild(decryptLine);
           terminalBody.scrollTop = terminalBody.scrollHeight;
 
+          // Print access granted sat-link
           setTimeout(() => {
-            terminalGate.classList.add("fade-out");
+            const satLine = document.createElement("div");
+            satLine.className = "terminal-line";
+            satLine.textContent = "> SAT-LINK ESTABLISHED. REDIRECTING...";
+            terminalBody.appendChild(satLine);
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+
+            // Fade out terminal gate, fade in GTA loading splash
             setTimeout(() => {
-              terminalGate.style.display = "none";
+              terminalGate.classList.add("fade-out");
+              
+              const gtaSplash = document.getElementById("gtaSplash");
+              const splashBarFill = document.getElementById("splashBarFill");
+              const splashLoadingText = document.getElementById("splashLoadingText");
+
+              if (gtaSplash && splashBarFill) {
+                gtaSplash.style.display = "flex";
+                
+                let pct = 0;
+                const fillInterval = setInterval(() => {
+                  pct += 2;
+                  if (pct <= 100) {
+                    splashBarFill.style.width = `${pct}%`;
+                    if (pct === 50 && splashLoadingText) {
+                      splashLoadingText.textContent = "SYNCHRONIZING HEISTS...";
+                    }
+                  } else {
+                    clearInterval(fillInterval);
+                    // Dismiss Loading Screen
+                    setTimeout(() => {
+                      gtaSplash.classList.add("slide-up");
+                      setTimeout(() => {
+                        gtaSplash.style.display = "none";
+                        terminalGate.style.display = "none";
+                      }, 800);
+                    }, 400);
+                  }
+                }, 40);
+              } else {
+                // Fallback in case of missing DOM elements
+                setTimeout(() => {
+                  terminalGate.style.display = "none";
+                }, 800);
+              }
             }, 800);
-          }, 1000);
+          }, 600);
         }, 500);
       }
     });
