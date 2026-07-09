@@ -234,6 +234,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
+      // A380 background color adaptation based on scroll position
+      const a380El = document.getElementById("a380Bg");
+      if (a380El) {
+        a380El.classList.remove("a380-light", "a380-mid", "a380-dark");
+        if (progress < 0.2) {
+          a380El.classList.add("a380-light");   // sunrise/gold background
+        } else if (progress < 0.55) {
+          a380El.classList.add("a380-mid");      // sky-blue background
+        } else {
+          a380El.classList.add("a380-dark");     // deep indigo/space background
+        }
+      }
+
       ticking = false;
     });
   };

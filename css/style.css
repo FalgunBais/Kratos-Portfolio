@@ -1730,3 +1730,54 @@ body.konami-active {
   width: 60px;
   height: 30px;
 }
+
+/* Fixed A380 Background Silhouette */
+.a380-bg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) perspective(800px) rotateY(-12deg) rotateX(5deg);
+  z-index: 0;
+  pointer-events: none;
+  width: 70vw;
+  max-width: 900px;
+  opacity: 0.08;
+  color: rgba(10, 20, 50, 0.9);
+  transition: color 0.6s ease, opacity 0.6s ease, filter 0.6s ease;
+  filter: drop-shadow(0 0 0px transparent);
+}
+
+.a380-svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Dynamic scroll-based color classes applied by JS */
+.a380-bg.a380-light {
+  /* For light/sunrise backgrounds at the top - use dark silhouette */
+  color: rgba(10, 20, 50, 0.85);
+  opacity: 0.06;
+  filter: drop-shadow(0 0 0px transparent);
+}
+
+.a380-bg.a380-mid {
+  /* For mid-sky blue backgrounds - use white silhouette */
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 0.06;
+  filter: drop-shadow(0 8px 20px rgba(0, 240, 255, 0.1));
+}
+
+.a380-bg.a380-dark {
+  /* For deep indigo/space dark backgrounds - use glowing cyan silhouette */
+  color: rgba(0, 240, 255, 0.6);
+  opacity: 0.08;
+  filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.15));
+}
+
+/* Responsive scaling */
+@media (max-width: 768px) {
+  .a380-bg {
+    width: 90vw;
+    transform: translate(-50%, -50%) perspective(600px) rotateY(-8deg) rotateX(3deg);
+  }
+}

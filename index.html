@@ -71,6 +71,35 @@
   <!-- CRT Overlay -->
   <div class="crt-overlay" aria-hidden="true"></div>
 
+  <!-- Fixed A380 Background Silhouette -->
+  <div class="a380-bg" id="a380Bg" aria-hidden="true">
+    <svg viewBox="0 0 800 260" class="a380-svg" xmlns="http://www.w3.org/2000/svg">
+      <!-- Fuselage -->
+      <ellipse cx="400" cy="130" rx="340" ry="45" fill="currentColor" opacity="0.9"/>
+      <!-- Nose cone -->
+      <path d="M60,130 Q20,130 60,125 Q40,120 60,115 Q30,128 60,130 Z" fill="currentColor" opacity="0.85"/>
+      <!-- Tail fin (vertical stabilizer) -->
+      <path d="M720,130 L740,130 L760,40 L730,35 L715,90 Z" fill="currentColor" opacity="0.9"/>
+      <!-- Horizontal stabilizer -->
+      <path d="M695,125 L760,100 L770,108 L760,115 L710,130 Z" fill="currentColor" opacity="0.85"/>
+      <path d="M695,135 L760,160 L770,152 L760,145 L710,130 Z" fill="currentColor" opacity="0.85"/>
+      <!-- Left wing -->
+      <path d="M280,155 L180,240 L160,240 L165,235 L250,168 L320,155 Z" fill="currentColor" opacity="0.88"/>
+      <!-- Right wing -->
+      <path d="M280,105 L180,20 L160,20 L165,25 L250,92 L320,105 Z" fill="currentColor" opacity="0.88"/>
+      <!-- Engine pods (4 engines - A380 style) -->
+      <ellipse cx="220" cy="62" rx="22" ry="10" fill="currentColor" opacity="0.8"/>
+      <ellipse cx="285" cy="80" rx="20" ry="9" fill="currentColor" opacity="0.8"/>
+      <ellipse cx="220" cy="198" rx="22" ry="10" fill="currentColor" opacity="0.8"/>
+      <ellipse cx="285" cy="180" rx="20" ry="9" fill="currentColor" opacity="0.8"/>
+      <!-- Cockpit windows -->
+      <rect x="68" y="123" width="14" height="5" rx="2" fill="currentColor" opacity="0.5"/>
+      <!-- Passenger windows (row of dots along fuselage) -->
+      <line x1="100" y1="120" x2="700" y2="120" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.35"/>
+      <line x1="100" y1="140" x2="700" y2="140" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.35"/>
+    </svg>
+  </div>
+
   <!-- Cloud Parallax Container instead of Starfield -->
   <div class="cloud-container" aria-hidden="true">
     <div class="cloud speed-1" style="top: 15%; left: -10%;">☁️</div>
