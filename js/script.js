@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", () => {
   ).matches;
 
   const phrases = [
-    "B.Tech CS Student in Masti Ghar",
-    "AWS Certified Heist Architect",
-    "AI & Cloud Exploits Specialist",
-    "Cybersecurity wanted star level 5",
+    "Aviation Enthusiast & Pilot",
+    "B.Tech CS Student in Flight Control",
+    "AWS Certified Cloud Navigator",
+    "AI & Flight Deck Engineer",
   ];
 
   const typewriterEl = document.getElementById("typewriter");
@@ -157,6 +157,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const hpFill = document.getElementById("hpFill");
   const armorFill = document.getElementById("armorFill");
+  const altTelemetry = document.getElementById("altTelemetry");
+  const spdTelemetry = document.getElementById("spdTelemetry");
 
   let ticking = false;
 
@@ -178,23 +180,44 @@ document.addEventListener("DOMContentLoaded", () => {
         const screenX = cachedSvgPageX + point.x * cachedScaleX;
         const screenY = cachedSvgPageY + point.y * cachedScaleY;
 
-        playerSpriteContainer.style.transform = `translate3d(${screenX}px, ${screenY}px, 0)`;
+        // Calculate heading angle (banking)
+        const nextSampleIndex = Math.min(sampleIndex + 5, NUM_SAMPLES);
+        const nextPoint = cachedPoints[nextSampleIndex] || point;
+        const dx = nextPoint.x - point.x;
+        const dy = nextPoint.y - point.y;
+        let angle = 0;
+        if (dx !== 0 || dy !== 0) {
+          angle = Math.atan2(dy, dx) * (180 / Math.PI) + 90;
+        }
+
+        // Apply translate and rotation/banking
+        playerSpriteContainer.style.transform = `translate3d(${screenX}px, ${screenY}px, 0) translate(-50%, -50%) rotate(${angle}deg)`;
       }
 
       if (hpFill) {
         hpFill.style.width = `${scrollPercent}%`;
       }
 
-      // Decrement armor slightly as progress increases to give a dynamic survival feeling
-      if (armorFill) {
-        armorFill.style.width = `${Math.max(75 - scrollPercent * 0.4, 15)}%`;
+      // Calculate altitude: 0 to 35,000 FT
+      if (altTelemetry) {
+        const altVal = Math.floor(progress * 35000);
+        altTelemetry.textContent = altVal.toLocaleString() + " FT";
       }
 
-      // Calculate wanted level stars
+      // Calculate airspeed: accelerate from 140 KTS (takeoff) to 540 KTS (cruise)
+      const speedVal = Math.floor(140 + progress * 400);
+      if (spdTelemetry) {
+        spdTelemetry.textContent = speedVal.toLocaleString() + " KTS";
+      }
+      if (armorFill) {
+        armorFill.style.width = `${(speedVal / 540) * 100}%`;
+      }
+
+      // Calculate navigation fixes
       const wantedContainer = document.getElementById("hudWanted");
       if (wantedContainer) {
         const starCount = Math.min(Math.floor(progress * 5) + 1, 5);
-        wantedContainer.setAttribute("aria-label", `Wanted level: ${starCount} stars`);
+        wantedContainer.setAttribute("aria-label", `Flight fixes: ${starCount}`);
 
         const stars = wantedContainer.querySelectorAll(".star");
         stars.forEach((star, index) => {
@@ -329,14 +352,14 @@ document.addEventListener("DOMContentLoaded", () => {
       terminalInput.focus();
     });
 
-    const question = "> WHAT BRINGS YOU HERE GAMER? ";
+    const question = "> ENTER FLIGHT DESTINATION TO INITIALIZE FLIGHT PLAN... ";
     let charIdx = 0;
 
     const typeDialogue = () => {
       if (charIdx < question.length) {
         terminalDialogue.textContent += question.charAt(charIdx);
         charIdx++;
-        setTimeout(typeDialogue, 60);
+        setTimeout(typeDialogue, 40);
       } else {
         terminalInputLine.style.display = "flex";
         terminalInput.focus();
@@ -354,7 +377,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const userLine = document.createElement("div");
         userLine.className = "terminal-line user-entered";
-        userLine.textContent = `visitor@falgun_net:~$ ${val}`;
+        userLine.textContent = `captain@falgun_air:~$ ${val}`;
         terminalBody.appendChild(userLine);
         terminalBody.scrollTop = terminalBody.scrollHeight;
 
@@ -362,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => {
           const decryptLine = document.createElement("div");
           decryptLine.className = "terminal-line";
-          decryptLine.textContent = "> DE-ENCRYPTING DATA: [████████████████████] 100%";
+          decryptLine.textContent = "> ASSIGNING FLIGHT COORDINATES... [OK]";
           terminalBody.appendChild(decryptLine);
           terminalBody.scrollTop = terminalBody.scrollHeight;
 
@@ -370,11 +393,11 @@ document.addEventListener("DOMContentLoaded", () => {
           setTimeout(() => {
             const satLine = document.createElement("div");
             satLine.className = "terminal-line";
-            satLine.textContent = "> SAT-LINK ESTABLISHED. REDIRECTING...";
+            satLine.textContent = "> IGNITING ENGINES... THRUST 100%";
             terminalBody.appendChild(satLine);
             terminalBody.scrollTop = terminalBody.scrollHeight;
 
-            // Fade out terminal gate, fade in GTA loading splash
+            // Fade out terminal gate, fade in flight loading splash
             setTimeout(() => {
               terminalGate.classList.add("fade-out");
               
@@ -390,8 +413,11 @@ document.addEventListener("DOMContentLoaded", () => {
                   pct += 2;
                   if (pct <= 100) {
                     splashBarFill.style.width = `${pct}%`;
-                    if (pct === 50 && splashLoadingText) {
-                      splashLoadingText.textContent = "SYNCHRONIZING HEISTS...";
+                    if (pct === 40 && splashLoadingText) {
+                      splashLoadingText.textContent = "CALCULATING WAKE TURBULENCE...";
+                    }
+                    if (pct === 80 && splashLoadingText) {
+                      splashLoadingText.textContent = "TAKE-OFF GRANTED!";
                     }
                   } else {
                     clearInterval(fillInterval);

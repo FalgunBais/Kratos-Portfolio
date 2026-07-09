@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Pacifico&family=VT323&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Share+Tech+Mono&display=swap');
 
 :root {
   --bg-deep: #080415;
@@ -26,7 +26,7 @@ html {
 }
 
 body {
-  background: var(--bg-deep);
+  background: linear-gradient(180deg, #ffd194 0%, #70a1ff 15%, #1e90ff 40%, #0c2461 65%, #0a041c 85%, #02000a 100%);
   color: var(--text-light);
   font-family: 'Montserrat', sans-serif;
   font-size: 17px;
@@ -37,7 +37,7 @@ body {
 
 ::selection {
   background: var(--cyan);
-  color: var(--bg-deep);
+  color: #080415;
 }
 
 .skip-link {
@@ -45,7 +45,7 @@ body {
   top: -100%;
   left: 0;
   background: var(--cyan);
-  color: var(--bg-deep);
+  color: #080415;
   padding: 8px 16px;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
@@ -75,27 +75,46 @@ body {
     radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.5) 100%);
 }
 
-.starfield {
+.cloud-container {
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    radial-gradient(1px 1px at 10% 20%, rgba(255, 255, 255, 0.8), transparent),
-    radial-gradient(1px 1px at 30% 65%, rgba(255, 255, 255, 0.6), transparent),
-    radial-gradient(1px 1px at 55% 10%, rgba(255, 255, 255, 0.7), transparent),
-    radial-gradient(1px 1px at 70% 40%, rgba(255, 255, 255, 0.5), transparent),
-    radial-gradient(1.5px 1.5px at 25% 35%, rgba(255, 255, 255, 0.5), transparent),
-    radial-gradient(2px 2px at 40% 90%, rgba(255, 255, 255, 0.3), transparent),
-    radial-gradient(2px 2px at 75% 25%, rgba(255, 255, 255, 0.5), transparent),
-    linear-gradient(180deg, #080415 0%, #15062a 35%, #42063e 65%, #9d0457 85%, #d16903 100%);
-  background-size: 100% 200%;
-  animation: sunsetShift 20s ease infinite;
+  overflow: hidden;
 }
 
-@keyframes sunsetShift {
-  0%, 100% { background-position: 50% 0%; }
-  50% { background-position: 50% 100%; }
+.cloud {
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.15;
+  filter: blur(4px);
+  color: #ffffff;
+  user-select: none;
+}
+
+.cloud.speed-1 {
+  animation: drift 55s linear infinite;
+}
+
+.cloud.speed-2 {
+  animation: drift 75s linear infinite;
+  font-size: 160px;
+  opacity: 0.10;
+}
+
+.cloud.speed-3 {
+  animation: drift 95s linear infinite;
+  font-size: 200px;
+  opacity: 0.06;
+}
+
+@keyframes drift {
+  0% {
+    transform: translateX(-100vw);
+  }
+  100% {
+    transform: translateX(100vw);
+  }
 }
 
 .hud-bar {
@@ -150,6 +169,16 @@ body {
   color: var(--cyan);
   font-size: 13px;
   font-weight: 900;
+}
+
+.hud-telemetry {
+  color: var(--text-light);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  margin-left: 4px;
+  min-width: 65px;
+  display: inline-block;
+  text-shadow: 0 0 4px var(--text-light);
 }
 
 .hud-hp-track, .hud-armor-track {
@@ -214,55 +243,31 @@ body {
 }
 
 .level-path path {
-  stroke: var(--grid-line);
-  stroke-dasharray: 8 12;
-  stroke-width: 3;
+  stroke: var(--cyan);
+  stroke-dasharray: 6 10;
+  stroke-width: 4;
   fill: none;
+  filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.4));
+  animation: radarPulse 15s linear infinite;
+}
+
+@keyframes radarPulse {
+  to {
+    stroke-dashoffset: -100;
+  }
 }
 
 .player-sprite {
   position: relative;
-  width: 24px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   z-index: 10;
-  background: transparent;
-  box-shadow:
-    8px 0 0 #5c4033,
-    12px 0 0 #5c4033,
-    4px 4px 0 #5c4033,
-    8px 4px 0 #ffcc99,
-    12px 4px 0 #000000,
-    16px 4px 0 #ffcc99,
-    8px 8px 0 #ffcc99,
-    12px 8px 0 #ffcc99,
-    4px 12px 0 #00f0ff,
-    8px 12px 0 #ff007f,
-    12px 12px 0 #00f0ff,
-    16px 12px 0 #00f0ff,
-    4px 16px 0 #00f0ff,
-    8px 16px 0 #00f0ff,
-    12px 16px 0 #ff007f,
-    16px 16px 0 #00f0ff,
-    4px 20px 0 #1e90ff,
-    8px 20px 0 #1e90ff,
-    12px 20px 0 #1e90ff,
-    16px 20px 0 #1e90ff,
-    4px 24px 0 #1e90ff,
-    16px 24px 0 #1e90ff,
-    4px 28px 0 #ffffff,
-    8px 28px 0 #ffffff,
-    12px 28px 0 #ffffff,
-    16px 28px 0 #ffffff;
-  animation: spriteBob 0.4s steps(2) infinite;
-}
-
-@keyframes spriteBob {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-2px);
-  }
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,5 L58,40 L95,75 L58,70 L50,95 L42,70 L5,75 L42,40 Z' fill='%2300f0ff' stroke='%23ff007f' stroke-width='2'/%3E%3Cpath d='M50,30 L53,50 L47,50 Z' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.8));
+  transition: transform 0.15s ease-out;
 }
 
 #main {
@@ -339,14 +344,16 @@ body {
 }
 
 .vice-city-script {
-  font-family: 'Pacifico', cursive;
-  font-size: 42px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 28px;
   color: var(--cyan);
   text-shadow: 0 0 15px var(--cyan);
-  transform: rotate(-6deg);
-  margin-top: -15px;
-  margin-bottom: 12px;
+  transform: rotate(-2deg);
+  margin-top: 5px;
+  margin-bottom: 24px;
   z-index: 1;
+  letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 @keyframes glitch {
@@ -1070,7 +1077,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  font-family: 'VT323', monospace;
+  font-family: 'Share Tech Mono', monospace;
   transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
@@ -1160,7 +1167,7 @@ body {
   border: none;
   outline: none;
   color: #39ff14;
-  font-family: 'VT323', monospace;
+  font-family: 'Share Tech Mono', monospace;
   font-size: 24px;
   flex: 1;
   text-shadow: 0 0 5px rgba(57, 255, 20, 0.4);
@@ -1230,17 +1237,19 @@ body {
   color: var(--text-light);
   letter-spacing: 2px;
   text-transform: uppercase;
-  margin-top: -60px;
+  margin-top: 15px;
   text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 .gta-splash-subtitle {
-  font-family: 'Pacifico', cursive;
-  font-size: 32px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 24px;
   color: var(--cyan);
   text-shadow: 0 0 10px var(--cyan);
-  transform: rotate(-5deg);
-  margin-top: -5px;
+  transform: rotate(-1deg);
+  margin-top: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
 }
 
 .gta-splash-loader {
@@ -1608,11 +1617,12 @@ body.konami-active {
 
   .gta-splash-title {
     font-size: 20px;
-    margin-top: -30px;
+    margin-top: 10px;
   }
 
   .gta-splash-subtitle {
-    font-size: 18px;
+    font-size: 16px;
+    margin-top: 5px;
   }
 
   .gta-splash-loader {
@@ -1626,4 +1636,46 @@ body.konami-active {
   .gta-splash-tip-text {
     font-size: 11px;
   }
+}
+
+/* Flashing Runway Navigation Lights */
+.r-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 10px currentColor;
+}
+
+.red-light {
+  color: #ff3366;
+  background-color: #ff3366;
+  animation: flashRed 1s infinite alternate;
+}
+
+.green-light {
+  color: #33ff66;
+  background-color: #33ff66;
+  animation: flashGreen 1s infinite alternate 0.2s;
+}
+
+.blue-light {
+  color: #33aaff;
+  background-color: #33aaff;
+  animation: flashBlue 1s infinite alternate 0.4s;
+}
+
+@keyframes flashRed {
+  0% { opacity: 0.3; filter: brightness(0.6); }
+  100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 8px #ff3366); }
+}
+
+@keyframes flashGreen {
+  0% { opacity: 0.3; filter: brightness(0.6); }
+  100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 8px #33ff66); }
+}
+
+@keyframes flashBlue {
+  0% { opacity: 0.3; filter: brightness(0.6); }
+  100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 8px #33aaff); }
 }

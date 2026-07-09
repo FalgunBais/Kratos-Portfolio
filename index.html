@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Falgun Singh Bais | Masti Ghar Portfolio</title>
-  <meta name="description" content="Explore the GTA 6 and Masti Ghar inspired synthwave portfolio of Falgun Singh Bais.">
-  <meta name="keywords" content="Falgun Singh Bais, portfolio, developer, gta 6, masti ghar, synthwave">
+  <title>Captain Falgun Singh Bais | Flight Deck Portfolio</title>
+  <meta name="description" content="Explore the high-fidelity aviation and aerospace flight path portfolio of Captain Falgun Singh Bais.">
+  <meta name="keywords" content="Falgun Singh Bais, pilot, aviation, developer, aerospace, flight plan, clouds, jet">
   <meta name="author" content="Falgun Singh Bais">
-  <meta property="og:title" content="Falgun Singh Bais | Masti Ghar Portfolio">
-  <meta property="og:description" content="A GTA 6 and Masti Ghar inspired synthwave developer portfolio">
+  <meta property="og:title" content="Captain Falgun Singh Bais | Flight Deck Portfolio">
+  <meta property="og:description" content="A high-fidelity aviation and aerospace flight plan developer portfolio">
   <meta property="og:type" content="website">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Pacifico&family=VT323&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -23,15 +23,15 @@
         <span class="terminal-dot red"></span>
         <span class="terminal-dot yellow"></span>
         <span class="terminal-dot green"></span>
-        <span class="terminal-title">FALGUN_NET // SECURE_PORTAL</span>
+        <span class="terminal-title">COCKPIT_COMPUTER // FLIGHT_PLANNER</span>
       </div>
       <div class="terminal-body" id="terminalBody">
-        <div class="terminal-line text-dim">SYSTEM INITIALIZING...</div>
-        <div class="terminal-line text-dim">CONNECTED TO FALGUN_NET v6.0</div>
+        <div class="terminal-line text-dim">SYSTEM STATUS: NOMINAL</div>
+        <div class="terminal-line text-dim">ENGINES: STANDBY // GPS NAV: READY</div>
         <div class="terminal-line" id="terminalDialogue"></div>
       </div>
       <div class="terminal-input-line" id="terminalInputLine" style="display: none;">
-        <span class="terminal-prompt">visitor@falgun_net:~$</span>
+        <span class="terminal-prompt">captain@falgun_air:~$</span>
         <input type="text" id="terminalInput" autofocus autocomplete="off" aria-label="Type your response to enter">
       </div>
     </div>
@@ -42,19 +42,23 @@
     <div class="gta-splash-bg" aria-hidden="true"></div>
     <div class="gta-splash-content">
       <div class="gta-splash-logo-container">
-        <div class="gta-splash-vi">VI</div>
-        <h2 class="gta-splash-title">GRAND THEFT RESUME</h2>
-        <p class="gta-splash-subtitle">FALGUN SINGH BAIS</p>
+        <div class="gta-splash-vi">
+          <svg viewBox="0 0 100 100" class="jet-logo-svg" style="width: 120px; height: 120px; color: var(--magenta);">
+            <path d="M50,10 L54,35 L85,65 L54,65 L50,85 L46,85 L42,65 L15,65 L46,35 Z" fill="currentColor"/>
+          </svg>
+        </div>
+        <h2 class="gta-splash-title">FLIGHT PLAN CALIBRATION</h2>
+        <p class="gta-splash-subtitle">CAPT. FALGUN SINGH BAIS</p>
       </div>
       <div class="gta-splash-loader">
         <div class="gta-splash-bar-track">
           <div class="gta-splash-bar-fill" id="splashBarFill"></div>
         </div>
-        <p class="gta-splash-loading-text" id="splashLoadingText">LOADING ASSETS...</p>
+        <p class="gta-splash-loading-text" id="splashLoadingText">CALIBRATING GYROSCOPES...</p>
       </div>
       <div class="gta-splash-tip-box">
-        <span class="gta-splash-tip-label">TIP:</span>
-        <span class="gta-splash-tip-text">Scroll down the path to increase your Wanted Level stars and unlock corresponding Heists!</span>
+        <span class="gta-splash-tip-label">FLIGHT MANUAL:</span>
+        <span class="gta-splash-tip-text">Scroll down the flight plan path to climb altitude, increase airspeed, and log project clearances!</span>
       </div>
     </div>
   </div>
@@ -65,29 +69,36 @@
   <!-- CRT Overlay -->
   <div class="crt-overlay" aria-hidden="true"></div>
 
-  <!-- Starfield -->
-  <div class="starfield" aria-hidden="true"></div>
+  <!-- Cloud Parallax Container instead of Starfield -->
+  <div class="cloud-container" aria-hidden="true">
+    <div class="cloud speed-1" style="top: 15%; left: -10%;">☁️</div>
+    <div class="cloud speed-2" style="top: 30%; left: 75%;">☁️</div>
+    <div class="cloud speed-3" style="top: 55%; left: 5%;">☁️</div>
+    <div class="cloud speed-1" style="top: 75%; left: 60%;">☁️</div>
+  </div>
 
   <!-- HUD Bar -->
   <header class="hud-bar">
     <div class="hud-left">
-      <span class="hud-name">FALGUN</span>
+      <span class="hud-name">CAPT. FALGUN</span>
     </div>
     <div class="hud-status">
       <div class="hud-hp">
-        <span class="hud-hp-label">HP</span>
+        <span class="hud-hp-label">ALT</span>
         <div class="hud-hp-track">
           <div class="hud-hp-fill" id="hpFill"></div>
         </div>
+        <span class="hud-telemetry" id="altTelemetry">0 FT</span>
       </div>
       <div class="hud-armor">
-        <span class="hud-armor-label">ARMOR</span>
+        <span class="hud-armor-label">SPD</span>
         <div class="hud-armor-track">
           <div class="hud-armor-fill" id="armorFill"></div>
         </div>
+        <span class="hud-telemetry" id="spdTelemetry">140 KTS</span>
       </div>
     </div>
-    <div class="hud-wanted" id="hudWanted" aria-label="Wanted level: 0 stars">
+    <div class="hud-wanted" id="hudWanted" aria-label="Flight fixes unlocked: 0">
       <span class="star">☆</span><span class="star">☆</span><span class="star">☆</span><span class="star">☆</span><span class="star">☆</span>
     </div>
   </header>
@@ -105,16 +116,16 @@
   <main id="main">
     <!-- HERO / START SCREEN -->
     <section id="hero" class="section hero-section is-visible">
-      <div class="gta-vi-logo" aria-hidden="true">VI</div>
+      <div class="gta-vi-logo" aria-hidden="true" style="font-size: 220px; opacity: 0.04;">✈</div>
       <div class="hero-content">
-        <p class="hero-insert-coin">WELCOME TO MASTI GHAR</p>
+        <p class="hero-insert-coin">RUNWAY 01: PRE-FLIGHT INITIALIZED</p>
         <h1 class="glitch-title" data-text="FALGUN SINGH BAIS">FALGUN SINGH BAIS</h1>
-        <p class="vice-city-script">Masti Ghar</p>
+        <p class="vice-city-script">Cleared For Takeoff</p>
         <div class="hero-subtitle">
           <span id="typewriter"></span><span class="cursor">&nbsp;</span>
         </div>
         <div class="scroll-hint">
-          <span>▼ SCROLL TO START MISSION ▼</span>
+          <span>▼ SCROLL TO CLIMB ALTITUDE ▼</span>
         </div>
       </div>
     </section>
@@ -122,13 +133,13 @@
     <!-- LEVEL 01: EDUCATION / ORIGIN STORY -->
     <section id="education" class="section level-section">
       <div class="level-header">
-        <span class="level-number">MISSION 01</span>
-        <h2>The Debut</h2>
+        <span class="level-number">FLIGHT PLAN 01</span>
+        <h2>Captain Credentials</h2>
       </div>
       <div class="level-content">
         <!-- Professional Summary Bio Panel -->
         <div class="bio-panel">
-          <div class="bio-header">PLAYER BIO</div>
+          <div class="bio-header">PILOT BIO</div>
           <p class="bio-text" style="margin-bottom: 20px;">
             B.Tech Computer Science student at VIT Amaravati with a strong foundation in cloud computing, artificial intelligence, and cybersecurity. AWS Cloud Architecture certified, with hands-on exposure to AI-driven systems, cloud deployments, and competitive hackathons. Adept at translating academic knowledge into functional, real-world technical projects.
           </p>
@@ -174,8 +185,8 @@
     <!-- LEVEL 02: SKILLS / INVENTORY -->
     <section id="skills" class="section level-section">
       <div class="level-header">
-        <span class="level-number">WEAPONS WHEEL</span>
-        <h2>Skills Inventory</h2>
+        <span class="level-number">COCKPIT PANEL</span>
+        <h2>Technical Avionics</h2>
       </div>
       <div class="level-content">
         <div class="inv-grid">
@@ -191,16 +202,11 @@
           <div class="inv-slot" tabindex="0" title="Git & GitHub"><span class="inv-icon">📦</span><span class="inv-name">Git</span></div>
           <div class="inv-slot" tabindex="0" title="VS Code"><span class="inv-icon">💻</span><span class="inv-name">VS Code</span></div>
           <div class="inv-slot" tabindex="0" title="Linux Basics"><span class="inv-icon">🐧</span><span class="inv-name">Linux</span></div>
-          <div class="inv-slot" tabindex="0" title="English, Hindi, French"><span class="inv-icon">🗣️</span><span class="inv-name">Languages</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- LEVEL 03: CERTIFICATIONS / TROPHY CASE -->
+          <div class="inv-slot" tabindex="0" title="English, Hindi, French"><span class="inv-icon">🗣️</span><span cl    <!-- LEVEL 03: CERTIFICATIONS / TROPHY CASE -->
     <section id="certifications" class="section level-section">
       <div class="level-header">
-        <span class="level-number">ACHIEVEMENTS</span>
-        <h2>Trophies Unlocked</h2>
+        <span class="level-number">AIRSPACE AWARDS</span>
+        <h2>Flight Credentials</h2>
       </div>
       <div class="level-content">
         <div class="trophy-grid">
@@ -235,8 +241,8 @@
     <!-- LEVEL 04: PROJECTS / BOSS BATTLES -->
     <section id="projects" class="section level-section">
       <div class="level-header">
-        <span class="level-number">HEISTS</span>
-        <h2>Active Heists</h2>
+        <span class="level-number">MISSION PROFILE</span>
+        <h2>Payload Deliveries</h2>
       </div>
       <div class="level-content">
         <div class="boss-grid">
@@ -244,9 +250,9 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for Soil Nutrient Recommendation System project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="heist-header">HEIST PAYOUT</div>
-                <div class="heist-payout">$1,250,000</div>
-                <div class="heist-wanted" aria-label="Heist difficulty: 3 stars">
+                <div class="heist-header">PAYLOAD RANGE</div>
+                <div class="heist-payout">3,200 NM / Mach 0.82</div>
+                <div class="heist-wanted" aria-label="Flight rating: 3 stars">
                   <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span><span class="star inactive">☆</span>
                 </div>
                 <h3>NutriSoil AI</h3>
@@ -254,7 +260,7 @@
                 <p>AI soil analysis for optimal crop yield</p>
               </div>
               <div class="boss-card-back">
-                <h3>Heist Plan</h3>
+                <h3>Flight Plan</h3>
                 <p>A machine learning tool that analyzes soil composition to recommend optimal nutrients for improved crop yield.</p>
                 <ul>
                   <li>Custom ML recommendation model</li>
@@ -262,7 +268,6 @@
                   <li>Cultivar crop recommendation algorithm</li>
                   <li>Python-based optimization engine</li>
                 </ul>
-
               </div>
             </div>
           </div>
@@ -270,9 +275,9 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for AI Product Decision Hub project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="heist-header">HEIST PAYOUT</div>
-                <div class="heist-payout">$980,000</div>
-                <div class="heist-wanted" aria-label="Heist difficulty: 2 stars">
+                <div class="heist-header">PAYLOAD RANGE</div>
+                <div class="heist-payout">2,800 NM / Mach 0.78</div>
+                <div class="heist-wanted" aria-label="Flight rating: 2 stars">
                   <span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span><span class="star inactive">☆</span><span class="star inactive">☆</span>
                 </div>
                 <h3>AI Decision Hub</h3>
@@ -280,7 +285,7 @@
                 <p>Intelligent product-ranking system</p>
               </div>
               <div class="boss-card-back">
-                <h3>Heist Plan</h3>
+                <h3>Flight Plan</h3>
                 <p>Engineered an intelligent product-ranking system to support data-driven decision-making.</p>
                 <ul>
                   <li>Smart product comparison matrices</li>
@@ -288,7 +293,6 @@
                   <li>Data-driven decision support system</li>
                   <li>Custom scoring heuristics</li>
                 </ul>
-
               </div>
             </div>
           </div>
@@ -296,9 +300,9 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for AWS Task Manager project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="heist-header">HEIST PAYOUT</div>
-                <div class="heist-payout">$2,100,000</div>
-                <div class="heist-wanted" aria-label="Heist difficulty: 4 stars">
+                <div class="heist-header">PAYLOAD RANGE</div>
+                <div class="heist-payout">4,500 NM / Mach 1.6</div>
+                <div class="heist-wanted" aria-label="Flight rating: 4 stars">
                   <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span>
                 </div>
                 <h3>AWS Task Manager</h3>
@@ -306,7 +310,7 @@
                 <p>Cloud-hosted task manager app</p>
               </div>
               <div class="boss-card-back">
-                <h3>Heist Plan</h3>
+                <h3>Flight Plan</h3>
                 <p>Deployed a task management web application on AWS, using EC2 for hosting and IAM for access control.</p>
                 <ul>
                   <li>AWS EC2 instance hosting</li>
@@ -314,7 +318,6 @@
                   <li>High-performance API server</li>
                   <li>Secure task database integration</li>
                 </ul>
-
               </div>
             </div>
           </div>
@@ -322,9 +325,9 @@
           <div class="boss-card" tabindex="0" role="button" aria-label="Flip card for Threat Log Analyzer project details">
             <div class="boss-card-inner">
               <div class="boss-card-front">
-                <div class="heist-header">HEIST PAYOUT</div>
-                <div class="heist-payout">$1,650,000</div>
-                <div class="heist-wanted" aria-label="Heist difficulty: 3 stars">
+                <div class="heist-header">PAYLOAD RANGE</div>
+                <div class="heist-payout">3,600 NM / Mach 1.2</div>
+                <div class="heist-wanted" aria-label="Flight rating: 3 stars">
                   <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star inactive">☆</span><span class="star inactive">☆</span>
                 </div>
                 <h3>Log Threat Anal.</h3>
@@ -332,7 +335,7 @@
                 <p>Detects suspicious login patterns</p>
               </div>
               <div class="boss-card-back">
-                <h3>Heist Plan</h3>
+                <h3>Flight Plan</h3>
                 <p>Developed a Python-based tool to detect suspicious login patterns and flag potential security threats.</p>
                 <ul>
                   <li>Real-time log scraping & analysis</li>
@@ -340,7 +343,6 @@
                   <li>High-severity security threat flagger</li>
                   <li>Lightweight, extensible CLI design</li>
                 </ul>
-
               </div>
             </div>
           </div>
@@ -351,15 +353,15 @@
     <!-- LEVEL 05: EXPERIENCE / QUEST LOG -->
     <section id="experience" class="section level-section">
       <div class="level-header">
-        <span class="level-number">MISSION LOG</span>
-        <h2>Completed Missions</h2>
+        <span class="level-number">FLIGHT LOG</span>
+        <h2>Airspace Logbook</h2>
       </div>
       <div class="level-content">
         <div class="quest-list">
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
-              <div class="mission-passed-stamp">PASSED</div>
+              <div class="mission-passed-stamp">APPROVED</div>
               <h3>Hackathon Competitor</h3>
               <span class="quest-org">Competitive Hackathon — 5th Place</span>
               <p>Secured 5th place in a competitive hackathon by developing innovative solutions under tight deadlines.</p>
@@ -368,7 +370,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
-              <div class="mission-passed-stamp">PASSED</div>
+              <div class="mission-passed-stamp">APPROVED</div>
               <h3>CTF Cybersecurity Player</h3>
               <span class="quest-org">Capture The Flag Competitions</span>
               <p>Competed in multiple Capture The Flag (CTF) cybersecurity competitions, tackling cryptography, reverse engineering, and log analysis challenges.</p>
@@ -377,7 +379,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
-              <div class="mission-passed-stamp">PASSED</div>
+              <div class="mission-passed-stamp">APPROVED</div>
               <h3>Workshop Attendee</h3>
               <span class="quest-org">GDG Hyderabad 2025 AI Agents Workshop</span>
               <p>Attended the developer workshop focused on autonomous AI agents, multi-agent frameworks, and advanced agentic architectures.</p>
@@ -386,7 +388,7 @@
           <div class="quest-item">
             <span class="quest-status">►</span>
             <div class="quest-details">
-              <div class="mission-passed-stamp ongoing">ACTIVE</div>
+              <div class="mission-passed-stamp ongoing">IN FLIGHT</div>
               <h3>Early-Stage Contributor</h3>
               <span class="quest-org">Paddavi Startup</span>
               <p>Contributed to Paddavi, an early-stage startup, gaining hands-on startup experience and business workflows.</p>
@@ -395,7 +397,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
-              <div class="mission-passed-stamp">PASSED</div>
+              <div class="mission-passed-stamp">APPROVED</div>
               <h3>Marketing & Design Co-Lead</h3>
               <span class="quest-org">Gaming Club</span>
               <p>Co-led marketing campaigns and design initiatives, increasing event attendance and player engagement.</p>
@@ -404,7 +406,7 @@
           <div class="quest-item">
             <span class="quest-status">✓</span>
             <div class="quest-details">
-              <div class="mission-passed-stamp">PASSED</div>
+              <div class="mission-passed-stamp">APPROVED</div>
               <h3>Co-Curricular Enthusiast</h3>
               <span class="quest-org">Athletics & Performing Arts</span>
               <p>Pursued co-curricular interests including swimming, badminton, athletics, dance, and singing.</p>
@@ -417,13 +419,13 @@
     <!-- FINAL LEVEL: CONTACT / SAVE POINT -->
     <section id="contact" class="section level-section save-section">
       <div class="level-header">
-        <span class="level-number">SAFEHOUSE</span>
-        <h2>Establish Contact</h2>
+        <span class="level-number">LANDING TERMINAL</span>
+        <h2>Touchdown Checkpoint</h2>
       </div>
       <div class="level-content save-content">
-        <p class="save-text">Mission Complete! Visit the safehouse to save your progress and connect for the next heist.</p>
+        <p class="save-text">Touchdown Accomplished! Report to the landing terminal to save your flight telemetry and plan the next mission.</p>
         <p class="save-text" style="font-size: 18px; color: var(--text-dim); margin-top: -16px; margin-bottom: 32px;">
-          LOCATION: KOTA, RAJASTHAN
+          PORT OF ORIGIN: KOTA, RAJASTHAN
         </p>
         <div class="contact-links">
           <a href="https://www.linkedin.com/in/falgun-singh-bais" class="btn-pixel btn-magenta" target="_blank" rel="noopener noreferrer">LinkedIn</a>
@@ -431,7 +433,17 @@
           <a href="tel:+916379732434" class="btn-pixel btn-cyan">Phone</a>
           <a href="resume.pdf" class="btn-pixel btn-gold" target="_blank" rel="noopener noreferrer">Resume</a>
         </div>
-        <p class="save-footer">© 2026 Falgun Singh Bais — Game Over? Never.</p>
+        
+        <!-- Flashing runway lights -->
+        <div class="runway-lights" aria-hidden="true" style="margin-top: 40px; display: flex; justify-content: center; gap: 8px;">
+          <span class="r-light red-light"></span>
+          <span class="r-light green-light"></span>
+          <span class="r-light blue-light"></span>
+          <span class="r-light green-light"></span>
+          <span class="r-light red-light"></span>
+        </div>
+
+        <p class="save-footer" style="margin-top: 15px;">© 2026 Captain Falgun Singh Bais — Clear skies ahead.</p>
       </div>
     </section>
   </main>
