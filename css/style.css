@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Share+Tech+Mono&display=swap');
 
 :root {
   --bg-deep: #080415;
@@ -47,7 +47,7 @@ body {
   background: var(--cyan);
   color: #080415;
   padding: 8px 16px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 11px;
   text-decoration: none;
@@ -131,7 +131,7 @@ body {
   justify-content: space-between;
   height: 54px;
   padding: 0 24px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 1px;
@@ -305,7 +305,7 @@ body {
 }
 
 .hero-insert-coin {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--gold);
@@ -316,7 +316,7 @@ body {
 
 .gta-vi-logo {
   position: absolute;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 280px;
   color: transparent;
@@ -333,7 +333,7 @@ body {
 }
 
 .glitch-title {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 54px;
   color: var(--text-light);
@@ -430,7 +430,7 @@ body {
 .scroll-hint {
   margin-top: 48px;
   color: var(--text-dim);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 11px;
   animation: blink 2s ease infinite;
@@ -452,7 +452,7 @@ body {
 
 .level-number {
   display: block;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 15px;
   color: var(--magenta);
@@ -462,7 +462,7 @@ body {
 }
 
 .level-header h2 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 32px;
   color: var(--cyan);
@@ -495,7 +495,7 @@ body {
 }
 
 .edu-header h3 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 21px;
   color: var(--text-light);
@@ -503,7 +503,7 @@ body {
 }
 
 .edu-year {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 15px;
   color: var(--gold);
@@ -536,7 +536,7 @@ body {
 }
 
 .edu-score {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 15px;
   color: var(--gold);
@@ -575,7 +575,7 @@ body {
 }
 
 .inv-name {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: var(--text-dim);
@@ -655,7 +655,7 @@ body {
 }
 
 .trophy-card h3 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 18px;
   color: var(--gold);
@@ -717,7 +717,7 @@ body {
 }
 
 .heist-header {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--text-dim);
@@ -726,7 +726,7 @@ body {
 }
 
 .heist-payout {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 32px;
   color: var(--green);
@@ -752,7 +752,7 @@ body {
 }
 
 .boss-card-front h3 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 24px;
   color: var(--text-light);
@@ -761,7 +761,7 @@ body {
 }
 
 .boss-tech {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 13px;
   color: var(--cyan);
@@ -784,7 +784,7 @@ body {
 }
 
 .boss-card-back h3 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 16px;
   color: var(--cyan);
@@ -873,7 +873,7 @@ body {
   right: 24px;
   border: 2px solid var(--green);
   color: var(--green);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 13px;
   padding: 4px 8px;
@@ -893,7 +893,7 @@ body {
 }
 
 .quest-details h3 {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 19px;
   color: var(--text-light);
@@ -902,7 +902,7 @@ body {
 }
 
 .quest-org {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 14px;
   color: var(--gold);
@@ -938,7 +938,7 @@ body {
 
 .save-footer {
   color: var(--text-dim);
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 12px;
   margin-top: 24px;
@@ -946,7 +946,7 @@ body {
 }
 
 .btn-pixel {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 12px;
   text-transform: uppercase;
@@ -1023,7 +1023,7 @@ body {
 }
 
 .bio-header {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 14px;
   color: var(--cyan);
@@ -1049,7 +1049,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 12px;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
@@ -1120,7 +1120,7 @@ body {
 .terminal-title {
   color: #69568b;
   font-size: 13px;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   margin-left: 10px;
   letter-spacing: 1px;
@@ -1217,7 +1217,7 @@ body {
 }
 
 .gta-splash-vi {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 160px;
   line-height: 1;
@@ -1231,7 +1231,7 @@ body {
 }
 
 .gta-splash-title {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 42px;
   color: var(--text-light);
@@ -1278,7 +1278,7 @@ body {
 }
 
 .gta-splash-loading-text {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 11px;
   color: var(--text-dim);
@@ -1298,7 +1298,7 @@ body {
 }
 
 .gta-splash-tip-label {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 13px;
   color: var(--magenta);
@@ -1349,7 +1349,7 @@ body {
 }
 
 .pixel-dialog-header {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 16px;
   color: var(--gold);
@@ -1358,7 +1358,7 @@ body {
 }
 
 .pixel-dialog-text {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 24px;
   color: var(--text-light);
@@ -1678,4 +1678,47 @@ body.konami-active {
 @keyframes flashBlue {
   0% { opacity: 0.3; filter: brightness(0.6); }
   100% { opacity: 1; filter: brightness(1.2) drop-shadow(0 0 8px #33aaff); }
+}
+
+
+/* Captain Hat Styling */
+.captain-name-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.captain-hat-svg {
+  position: absolute;
+  top: -24px;
+  left: -8px;
+  width: 50px;
+  height: 25px;
+  transform: rotate(-10deg);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Specific scaling for HUD navigation header cap */
+.hud-name .captain-hat-svg {
+  top: -15px;
+  left: -6px;
+  width: 32px;
+  height: 16px;
+}
+
+/* Specific scaling for Takeoff Splash title cap */
+.gta-splash-subtitle .captain-hat-svg {
+  top: -17px;
+  left: -7px;
+  width: 38px;
+  height: 19px;
+}
+
+/* Specific scaling for Hero glitch title cap */
+.glitch-title .captain-hat-svg {
+  top: -30px;
+  left: -12px;
+  width: 60px;
+  height: 30px;
 }
