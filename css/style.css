@@ -211,7 +211,7 @@ body {
 }
 
 .hud-wanted .star {
-  color: #27144e;
+  color: rgba(255, 255, 255, 0.15);
   text-shadow: none;
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
@@ -747,7 +747,7 @@ body {
 }
 
 .heist-wanted .star.inactive {
-  color: #27144e;
+  color: rgba(255, 255, 255, 0.15);
   text-shadow: none;
 }
 
