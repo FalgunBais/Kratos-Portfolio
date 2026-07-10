@@ -506,8 +506,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const canvas = document.getElementById("a380Canvas");
     if (!canvas) return;
 
-    if (typeof THREE === "undefined" || typeof THREE.GLTFLoader === "undefined") {
-      console.warn("Three.js or GLTFLoader not loaded. WebGL A380 rendering skipped.");
+    if (typeof THREE === "undefined" || typeof THREE.GLTFLoader === "undefined" || typeof THREE.DRACOLoader === "undefined") {
+      console.warn("Three.js libraries not fully loaded. WebGL A380 rendering skipped.");
       return;
     }
 
@@ -526,97 +526,212 @@ document.addEventListener("DOMContentLoaded", () => {
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({
       canvas: canvas,
-      alpha: true, // Transparent context to let sunset/sky gradients show
-      antialias: true
+      alpha: true, // Transparent context to let sky gradients show
+      antialias: true,
+      powerPreference: "high-performance"
     });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.0;
 
-    // Enable soft shadowing
+    // Enable soft shadows
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-    // --- Dynamic Light Rig ---
+    // --- Postprocessing UnrealBloomPass Pipeline ---
+    const renderScene = new THREE.RenderPass(scene, camera);
+    const bloomPass = new THREE.UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      0.3,   // Bloom strength target
+      0.45,  // Radius
+      0.85   // Threshold
+    );
+
+    const composer = new THREE.EffectComposer(renderer);
+    composer.addPass(renderScene);
+    composer.addPass(bloomPass);
+
+    // --- Cinematic Lights ---
     // Ambient Light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
     scene.add(ambientLight);
 
-    // Directional Sun Light (key light casting soft shadows)
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-    dirLight.position.set(5, 15, 10);
+    // Hemisphere Light (Sky illumination with ground bounce reflections)
+    const hemiLight = new THREE.HemisphereLight(0xe6f2ff, 0xffd8b3, 0.6);
+    scene.add(hemiLight);
+
+    // Directional Sun Light (casts shadows)
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    dirLight.position.set(10, 20, 15);
     dirLight.castShadow = true;
     dirLight.shadow.mapSize.width = 1024;
     dirLight.shadow.mapSize.height = 1024;
     dirLight.shadow.camera.near = 0.5;
-    dirLight.shadow.camera.far = 50;
-    dirLight.shadow.bias = -0.0005;
+    dirLight.shadow.camera.far = 60;
+    dirLight.shadow.bias = -0.0002;
     scene.add(dirLight);
 
-    // Neon Left Rim Light (Cyan)
-    const cyanLight = new THREE.PointLight(0x00f0ff, 0, 80);
-    cyanLight.position.set(-20, -5, 5);
-    scene.add(cyanLight);
+    // Rim Fill Light Left (Cyan)
+    const rimLightLeft = new THREE.PointLight(0x00f0ff, 0.4, 60);
+    rimLightLeft.position.set(-25, 5, 5);
+    scene.add(rimLightLeft);
 
-    // Neon Right Rim Light (Magenta)
-    const magentaLight = new THREE.PointLight(0xff007f, 0, 80);
-    magentaLight.position.set(20, 5, -5);
-    scene.add(magentaLight);
+    // Rim Fill Light Right (Pink)
+    const rimLightRight = new THREE.PointLight(0xff00aa, 0.3, 60);
+    rimLightRight.position.set(25, -5, -5);
+    scene.add(rimLightRight);
 
-    // Expose lights to window context for scroll animations
+    // Expose lights to window context
     window.a380Lights = {
       ambient: ambientLight,
       directional: dirLight,
-      cyan: cyanLight,
-      magenta: magentaLight
+      cyan: rimLightLeft,
+      magenta: rimLightRight
     };
 
     // Root Group
     const airplaneGroup = new THREE.Group();
     scene.add(airplaneGroup);
 
-    // --- Standard Shaded Materials ---
-    // Fuselage / Wings material
+    // --- Physically Based Materials ---
+    // Dynamic material interpolators
+    const activeMaterialSettings = {
+      color: new THREE.Color(0xffffff), // Matte white HERO default
+      roughness: 0.7,
+      metalness: 0.1,
+      emissive: new THREE.Color(0x000000),
+      bloomStrength: 0.15,
+      rimLeftColor: new THREE.Color(0x00f0ff),
+      rimLeftIntensity: 0.4,
+      rimRightColor: new THREE.Color(0xff00aa),
+      rimRightIntensity: 0.3,
+      dirLightColor: new THREE.Color(0xfff2e6),
+      dirLightIntensity: 1.0
+    };
+
+    const currentMaterialSettings = {
+      color: new THREE.Color(0xffffff),
+      roughness: 0.7,
+      metalness: 0.1,
+      emissive: new THREE.Color(0x000000)
+    };
+
+    // Fuselage material
     const fuselageMaterial = new THREE.MeshStandardMaterial({
-      color: 0xcccccc,
-      roughness: 0.35,
-      metalness: 0.65,
+      color: currentMaterialSettings.color,
+      roughness: currentMaterialSettings.roughness,
+      metalness: currentMaterialSettings.metalness,
       flatShading: false
     });
 
     // Windshield glass material
     const windshieldMaterial = new THREE.MeshStandardMaterial({
-      color: 0x0c071e,
+      color: 0x0a1128,
       roughness: 0.1,
       metalness: 0.95
     });
 
-    // Jet Engine metal material
+    // Jet Engine metal alloy
     const engineMaterial = new THREE.MeshStandardMaterial({
       color: 0x555555,
       roughness: 0.4,
       metalness: 0.8
     });
 
-    // Glowing exhaust plume material
+    // Emissive exhaust plume
     const exhaustMaterial = new THREE.MeshBasicMaterial({
       color: 0x00f0ff
     });
 
-    // Expose materials to window context for scroll animations
     window.a380Materials = {
       fuselage: fuselageMaterial,
       windshield: windshieldMaterial,
       engine: engineMaterial
     };
 
+    // --- Aviation Flashing Navigation Lights & Beacons ---
+    const navLights = [];
+    const createNavBeacon = (x, y, z, colorHex, isBeacon, isStrobe) => {
+      const geom = new THREE.SphereGeometry(0.15, 8, 8);
+      const mat = new THREE.MeshBasicMaterial({ color: colorHex });
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.position.set(x, y, z);
+      
+      const pLight = new THREE.PointLight(colorHex, 0, 10);
+      mesh.add(pLight);
+      
+      airplaneGroup.add(mesh);
+      navLights.push({
+        mesh,
+        pLight,
+        color: colorHex,
+        isBeacon,
+        isStrobe,
+        intensity: 2.0
+      });
+    };
+
+    // Port/Starboard Navigation lights (Left Red, Right Green)
+    createNavBeacon(-14.5, -0.4, -4.5, 0xff0000, false, false); 
+    createNavBeacon(14.5, -0.4, -4.5, 0x00ff00, false, false);
+    
+    // Wingtip Strobes (Flashing rapid white strobe)
+    createNavBeacon(-14.6, -0.38, -4.6, 0xffffff, false, true);
+    createNavBeacon(14.6, -0.38, -4.6, 0xffffff, false, true);
+
+    // Fuselage Beacons (Flashing slow red beacon on top & bottom)
+    createNavBeacon(0, 1.6, 0, 0xff0000, true, false); 
+    createNavBeacon(0, -1.6, 0, 0xff0000, true, false);
+
+    // --- Turbofan Rotation Groups ---
+    const fans = [];
+    const createEngineTurbine = (x, y, z) => {
+      const engGroup = new THREE.Group();
+      engGroup.position.set(x, y, z);
+
+      // Cowling
+      const cowlGeom = new THREE.CylinderGeometry(0.52, 0.42, 1.8, 16);
+      cowlGeom.rotateX(Math.PI / 2);
+      const cowlMesh = new THREE.Mesh(cowlGeom, engineMaterial);
+      cowlMesh.castShadow = true;
+      cowlMesh.receiveShadow = true;
+      engGroup.add(cowlMesh);
+
+      // Fan Blades Assembly
+      const fanGroup = new THREE.Group();
+      fanGroup.position.set(0, 0, 0.85);
+
+      const bladeGeom = new THREE.BoxGeometry(0.85, 0.1, 0.05);
+      for (let i = 0; i < 8; i++) {
+        const blade = new THREE.Mesh(bladeGeom, windshieldMaterial);
+        blade.rotation.z = (Math.PI / 4) * i;
+        fanGroup.add(blade);
+      }
+      engGroup.add(fanGroup);
+      fans.push(fanGroup);
+
+      // Exhaust cone
+      const exGeom = new THREE.ConeGeometry(0.32, 0.6, 12);
+      exGeom.rotateX(-Math.PI / 2);
+      exGeom.translate(0, 0, -1.05);
+      const exMesh = new THREE.Mesh(exGeom, exhaustMaterial);
+      engGroup.add(exMesh);
+
+      airplaneGroup.add(engGroup);
+    };
+
     // --- GLTF Loading with Procedural Fallback ---
     const loader = new THREE.GLTFLoader();
+    const dracoLoader = new THREE.DRACOLoader();
+    dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.4.3/");
+    loader.setDRACOLoader(dracoLoader);
+
     const modelUrl = "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/scenegraph-layer/airplane.glb";
     let loadedMesh = null;
 
-    // Helper to build fallback procedural shaded airplane
+    // Helper to build fallback procedural A380 meshes
     const buildProceduralModel = () => {
-      // Fuselage (Stretched Cylinder - double decker scale)
       const bodyGeom = new THREE.CylinderGeometry(1.5, 1.5, 17, 32);
       bodyGeom.rotateX(Math.PI / 2);
       const bodyMesh = new THREE.Mesh(bodyGeom, fuselageMaterial);
@@ -624,14 +739,12 @@ document.addEventListener("DOMContentLoaded", () => {
       bodyMesh.receiveShadow = true;
       airplaneGroup.add(bodyMesh);
 
-      // Cockpit windshield (Contouring overlay mesh on nose)
       const windGeom = new THREE.SphereGeometry(1.52, 32, 16, 0, Math.PI * 2, 0.05, 0.45);
       windGeom.rotateX(-Math.PI / 7);
       windGeom.translate(0, 0.25, 8.1);
       const windMesh = new THREE.Mesh(windGeom, windshieldMaterial);
       airplaneGroup.add(windMesh);
 
-      // Nose Cone
       const noseGeom = new THREE.ConeGeometry(1.5, 3.2, 32);
       noseGeom.rotateX(-Math.PI / 2);
       noseGeom.translate(0, 0, 10.1);
@@ -640,7 +753,6 @@ document.addEventListener("DOMContentLoaded", () => {
       noseMesh.receiveShadow = true;
       airplaneGroup.add(noseMesh);
 
-      // Tail Cone
       const tailGeom = new THREE.ConeGeometry(1.5, 4.2, 32);
       tailGeom.rotateX(Math.PI / 2);
       tailGeom.translate(0, 0, -10.6);
@@ -649,11 +761,10 @@ document.addEventListener("DOMContentLoaded", () => {
       tailMesh.receiveShadow = true;
       airplaneGroup.add(tailMesh);
 
-      // Left Main Wing (Realistic swept-back beveled ExtrudeGeometry)
       const wingShapeL = new THREE.Shape();
       wingShapeL.moveTo(0, 0);
-      wingShapeL.lineTo(-14.5, -4.5); // Swept back tip
-      wingShapeL.lineTo(-14.5, -5.5); // Tip width
+      wingShapeL.lineTo(-14.5, -4.5);
+      wingShapeL.lineTo(-14.5, -5.5);
       wingShapeL.lineTo(0, -3.6);
       wingShapeL.lineTo(0, 0);
       const leftWingGeom = new THREE.ExtrudeGeometry(wingShapeL, {
@@ -666,16 +777,15 @@ document.addEventListener("DOMContentLoaded", () => {
       leftWingGeom.rotateX(Math.PI / 2);
       leftWingGeom.translate(-0.8, 0, 0.5);
       const leftWingMesh = new THREE.Mesh(leftWingGeom, fuselageMaterial);
-      leftWingMesh.rotation.z = Math.PI / 24;  // Dihedral angle (tilt up)
+      leftWingMesh.rotation.z = Math.PI / 24;
       leftWingMesh.castShadow = true;
       leftWingMesh.receiveShadow = true;
       airplaneGroup.add(leftWingMesh);
 
-      // Right Main Wing (Realistic swept-back beveled ExtrudeGeometry)
       const wingShapeR = new THREE.Shape();
       wingShapeR.moveTo(0, 0);
-      wingShapeR.lineTo(14.5, -4.5); // Swept back tip
-      wingShapeR.lineTo(14.5, -5.5); // Tip width
+      wingShapeR.lineTo(14.5, -4.5);
+      wingShapeR.lineTo(14.5, -5.5);
       wingShapeR.lineTo(0, -3.6);
       wingShapeR.lineTo(0, 0);
       const rightWingGeom = new THREE.ExtrudeGeometry(wingShapeR, {
@@ -688,12 +798,11 @@ document.addEventListener("DOMContentLoaded", () => {
       rightWingGeom.rotateX(Math.PI / 2);
       rightWingGeom.translate(0.8, 0, 0.5);
       const rightWingMesh = new THREE.Mesh(rightWingGeom, fuselageMaterial);
-      rightWingMesh.rotation.z = -Math.PI / 24; // Dihedral angle (tilt up)
+      rightWingMesh.rotation.z = -Math.PI / 24;
       rightWingMesh.castShadow = true;
       rightWingMesh.receiveShadow = true;
       airplaneGroup.add(rightWingMesh);
 
-      // Vertical Stabilizer (Tail Fin)
       const finShape = new THREE.Shape();
       finShape.moveTo(0, 0);
       finShape.lineTo(0, 4.8);
@@ -713,7 +822,6 @@ document.addEventListener("DOMContentLoaded", () => {
       finMesh.receiveShadow = true;
       airplaneGroup.add(finMesh);
 
-      // Horizontal Stabilizers
       const stabLeftShape = new THREE.Shape();
       stabLeftShape.moveTo(0, 0);
       stabLeftShape.lineTo(-4.5, -1.8);
@@ -754,51 +862,20 @@ document.addEventListener("DOMContentLoaded", () => {
       stabRightMesh.receiveShadow = true;
       airplaneGroup.add(stabRightMesh);
 
-      // 4 Under-wing Turbofans (Detailed Engine Groups)
-      const createDetailedEngine = (x, y, z) => {
-        const engGroup = new THREE.Group();
-        engGroup.position.set(x, y, z);
-
-        // Cowling
-        const cowlGeom = new THREE.CylinderGeometry(0.52, 0.42, 1.8, 16);
-        cowlGeom.rotateX(Math.PI / 2);
-        const cowlMesh = new THREE.Mesh(cowlGeom, engineMaterial);
-        cowlMesh.castShadow = true;
-        cowlMesh.receiveShadow = true;
-        engGroup.add(cowlMesh);
-
-        // Fan
-        const fanGeom = new THREE.CylinderGeometry(0.38, 0.38, 0.1, 16);
-        fanGeom.rotateX(Math.PI / 2);
-        fanGeom.translate(0, 0, 0.85);
-        const fanMesh = new THREE.Mesh(fanGeom, windshieldMaterial);
-        engGroup.add(fanMesh);
-
-        // Exhaust cone
-        const exGeom = new THREE.ConeGeometry(0.32, 0.6, 12);
-        exGeom.rotateX(-Math.PI / 2);
-        exGeom.translate(0, 0, -1.05);
-        const exMesh = new THREE.Mesh(exGeom, exhaustMaterial);
-        engGroup.add(exMesh);
-
-        airplaneGroup.add(engGroup);
-      };
-
-      createDetailedEngine(-3.5, -0.4, 0.5);
-      createDetailedEngine(3.5, -0.4, 0.5);
-      createDetailedEngine(-7, -0.25, 1.3);
-      createDetailedEngine(7, -0.25, 1.3);
+      // Create turbines
+      createEngineTurbine(-3.5, -0.4, 0.5);
+      createEngineTurbine(3.5, -0.4, 0.5);
+      createEngineTurbine(-7, -0.25, 1.3);
+      createEngineTurbine(7, -0.25, 1.3);
     };
 
-    // Load actual GLB aircraft model
     loader.load(
       modelUrl,
       (gltf) => {
         loadedMesh = gltf.scene;
         
-        // Align and scale visgl airplane model to look like a centered A380
+        // Keynote 65%-75% screen visible ratio scale
         loadedMesh.scale.setScalar(0.18);
-        // Correct default GLB orientation: model is aligned vertically, let's lay it down Z
         loadedMesh.rotation.set(Math.PI / 2, 0, Math.PI);
         loadedMesh.position.set(0, 0, 0);
 
@@ -812,38 +889,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
         airplaneGroup.add(loadedMesh);
         window.a380Model = loadedMesh;
-        console.log("3D Airbus A380 GLB model loaded successfully.");
+
+        // Build detailed fan turbines underneath GLTF wings
+        createEngineTurbine(-3.5, -0.4, 0.5);
+        createEngineTurbine(3.5, -0.4, 0.5);
+        createEngineTurbine(-7, -0.25, 1.3);
+        createEngineTurbine(7, -0.25, 1.3);
+
+        console.log("Premium 3D Airbus A380 loaded successfully.");
       },
       undefined,
       (err) => {
-        console.warn("Error loading GLB. Falling back to high-fidelity procedural model.", err);
+        console.warn("Draco GLTF failed. Loading procedural engine model fallback.", err);
         buildProceduralModel();
       }
     );
 
     // Initial 3D tilt coordinates
-    airplaneGroup.rotation.set(0.2, -0.6, 0.15);
+    airplaneGroup.rotation.set(0.1, -0.5, 0.1);
 
-    // --- Interactive Mouse Cursor Rotation (±8°) ---
-    let targetRotation = { x: 0.2, y: -0.6 };
+    // --- Interactive Mouse Cursor Rotation (±6°) ---
+    let targetRotation = { x: 0.1, y: -0.5 };
 
     document.addEventListener("mousemove", (e) => {
-      // Normalize mouse coordinates to [-1, 1] range
+      // Normalize cursor coordinate points to [-1, 1]
       const nx = (e.clientX / window.innerWidth) * 2 - 1;
       const ny = (e.clientY / window.innerHeight) * 2 - 1;
 
-      // ±8 degrees is ~0.14 radians
-      targetRotation.y = -0.6 + nx * 0.14;
-      targetRotation.x = 0.2 + ny * 0.14;
+      // ±6 degrees is ~0.1 radians
+      targetRotation.y = -0.5 + nx * 0.1;
+      targetRotation.x = 0.1 + ny * 0.1;
     });
 
-    // Touch equivalent (using screen coordinate swipes)
+    // Touch coordinate track
     document.addEventListener("touchmove", (e) => {
       if (e.touches && e.touches.length > 0) {
         const nx = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
         const ny = (e.touches[0].clientY / window.innerHeight) * 2 - 1;
-        targetRotation.y = -0.6 + nx * 0.14;
-        targetRotation.x = 0.2 + ny * 0.14;
+        targetRotation.y = -0.5 + nx * 0.1;
+        targetRotation.x = 0.1 + ny * 0.1;
       }
     }, { passive: true });
 
@@ -852,7 +936,67 @@ document.addEventListener("DOMContentLoaded", () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(window.innerWidth, window.innerHeight);
+      composer.setSize(window.innerWidth, window.innerHeight);
     });
+
+    // --- IntersectionObserver for Dynamic Portfolio Sections ---
+    const portfolioSections = [
+      { id: "terminalGate", state: "HERO" },
+      { id: "gtaSplash", state: "HERO" },
+      { id: "education", state: "ABOUT" },
+      { id: "skills", state: "SKILLS" },
+      { id: "projects", state: "PROJECTS" },
+      { id: "experience", state: "EXPERIENCE" },
+      { id: "contact", state: "CONTACT" }
+    ];
+
+    const observerOptions = {
+      root: null,
+      rootMargin: "-25% 0px -25% 0px",
+      threshold: 0.1
+    };
+
+    let activeSectionState = "HERO";
+
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const match = portfolioSections.find(s => entry.target.id === s.id);
+          if (match) {
+            activeSectionState = match.state;
+          }
+        }
+      });
+    };
+
+    const sectionObserver = new IntersectionObserver(observerCallback, observerOptions);
+    portfolioSections.forEach(sec => {
+      const element = document.getElementById(sec.id);
+      if (element) sectionObserver.observe(element);
+    });
+
+    // Also observe the inner hero container directly to trigger HERO state immediately
+    const mainHeroContainer = document.querySelector(".hero-container");
+    if (mainHeroContainer) {
+      const heroObserver = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) activeSectionState = "HERO";
+      }, observerOptions);
+      heroObserver.observe(mainHeroContainer);
+    }
+
+    // --- Tab Inactive Pause Logic ---
+    let tabVisible = true;
+    document.addEventListener("visibilitychange", () => {
+      tabVisible = (document.visibilityState === "visible");
+    });
+
+    // --- Dynamic Scale calculator ---
+    const getResponsiveScale = () => {
+      const width = window.innerWidth;
+      if (width > 1024) return 1.0; // Desktop
+      if (width > 768) return 0.72; // Tablet
+      return 0.45; // Mobile (low poly simplified render logic)
+    };
 
     // --- FPS-Based Quality Throttling ---
     let frameCount = 0;
@@ -863,16 +1007,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const renderLoop = () => {
       requestAnimationFrame(renderLoop);
 
-      // FPS calculation
-      frameCount++;
+      // Skip render calculations if tab is inactive (performance preservation)
+      if (!tabVisible) return;
+
       const now = performance.now();
+
+      // FPS Quality calculation
+      frameCount++;
       if (now - lastTime >= 2000) {
         const fps = (frameCount * 1000) / (now - lastTime);
         if (fps < 40 && !lowPerfMode) {
-          console.warn("Performance warning (" + Math.round(fps) + " FPS). Disabling soft shadows and dropping pixel ratio.");
+          console.warn("Performance warning (" + Math.round(fps) + " FPS). Disabling soft shadows/bloom passes.");
           lowPerfMode = true;
           renderer.shadowMap.enabled = false;
           renderer.setPixelRatio(1);
+          composer.passes.forEach(pass => {
+            if (pass instanceof THREE.UnrealBloomPass) pass.strength = 0;
+          });
           airplaneGroup.traverse((node) => {
             if (node.isMesh) {
               node.castShadow = false;
@@ -884,31 +1035,180 @@ document.addEventListener("DOMContentLoaded", () => {
         lastTime = now;
       }
 
-      // Smoothly interpolate rotation to target (mouse offset)
-      airplaneGroup.rotation.y = THREE.MathUtils.lerp(airplaneGroup.rotation.y, targetRotation.y, 0.05);
-      airplaneGroup.rotation.x = THREE.MathUtils.lerp(airplaneGroup.rotation.x, targetRotation.x, 0.05);
+      // --- 1. Navigation Lights Flashing Logic ---
+      const strobeOn = (Math.floor(now / 150) % 6 === 0); // Wingtip strobes rapid double flash
+      const beaconIntensity = Math.max(0, Math.sin(now * 0.003)); // Beacon slow sinusoidal red pulse
 
-      // --- Scroll-Driven Vector Animation (kept in viewport) ---
+      navLights.forEach(light => {
+        if (light.isStrobe) {
+          light.pLight.intensity = strobeOn ? light.intensity : 0;
+          light.mesh.material.color.setHex(strobeOn ? 0xffffff : 0x222222);
+        } else if (light.isBeacon) {
+          light.pLight.intensity = beaconIntensity * light.intensity;
+          // Smooth color pulse
+          light.mesh.material.color.setRGB(beaconIntensity, 0.0, 0.0);
+        } else {
+          // Standard NAV lights (Port Red, Starboard Green) are steady on
+          light.pLight.intensity = light.intensity;
+        }
+      });
+
+      // --- 2. Turbofan rotation ---
+      fans.forEach(fan => {
+        fan.rotation.z += 0.08;
+      });
+
+      // --- 3. Keynote Idle Hover animations ---
+      // Banking left/right (±3° is ~0.05 rad)
+      const idleBank = Math.sin(now * 0.0006) * 0.05;
+      // Pitch nose (±1° is ~0.017 rad)
+      const idlePitch = Math.cos(now * 0.001) * 0.017;
+      // Floating vertical translation
+      const idleFloat = Math.sin(now * 0.0012) * 0.25;
+
+      // --- 4. Mouse Rotation Interp ---
+      airplaneGroup.rotation.y = THREE.MathUtils.lerp(airplaneGroup.rotation.y, targetRotation.y, 0.05);
+      airplaneGroup.rotation.x = THREE.MathUtils.lerp(airplaneGroup.rotation.x, targetRotation.x + idlePitch, 0.05);
+      airplaneGroup.rotation.z = THREE.MathUtils.lerp(airplaneGroup.rotation.z, 0.15 + idleBank, 0.05);
+
+      // --- 5. Scroll-driven scaling and sway drift ---
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       const progress = cachedDocHeight > 0 ? Math.min(scrollTop / cachedDocHeight, 1) : 0;
 
-      // 1. Banking / roll roll sway (simulating turns along path curves)
-      const rollVal = Math.sin(progress * Math.PI * 2.5) * 0.12; 
-      airplaneGroup.rotation.z = THREE.MathUtils.lerp(airplaneGroup.rotation.z, 0.15 + rollVal, 0.05);
-
-      // 2. Altitude Scale (plane gets slightly smaller/higher as scroll goes down)
-      const targetScale = 1.0 - progress * 0.25; 
+      const responsiveBaseScale = getResponsiveScale();
+      const targetScale = responsiveBaseScale * (1.0 - progress * 0.25);
       airplaneGroup.scale.setScalar(THREE.MathUtils.lerp(airplaneGroup.scale.x, targetScale, 0.05));
 
-      // 3. Side to side drift sway
+      // Side to side sway drift
       const targetX = Math.sin(progress * Math.PI * 2) * 2.0; 
       airplaneGroup.position.x = THREE.MathUtils.lerp(airplaneGroup.position.x, targetX, 0.05);
 
-      // 4. Up / down coordinate shift
-      const targetY = -0.5 + progress * 1.5;
+      // Float offset
+      const targetY = -0.5 + progress * 1.5 + idleFloat;
       airplaneGroup.position.y = THREE.MathUtils.lerp(airplaneGroup.position.y, targetY, 0.05);
 
-      renderer.render(scene, camera);
+      // --- 6. Section-based Color & Lighting Transition Setup ---
+      // Update targets based on current active portfolio section
+      switch (activeSectionState) {
+        case "HERO":
+          activeMaterialSettings.color.setHex(0xffffff); // Matte white
+          activeMaterialSettings.roughness = 0.7;
+          activeMaterialSettings.metalness = 0.15;
+          activeMaterialSettings.emissive.setHex(0x000000);
+          activeMaterialSettings.bloomStrength = lowPerfMode ? 0.0 : 0.15;
+          
+          activeMaterialSettings.rimLeftColor.setHex(0x00f0ff);
+          activeMaterialSettings.rimLeftIntensity = 0.2;
+          activeMaterialSettings.rimRightColor.setHex(0xff00aa);
+          activeMaterialSettings.rimRightIntensity = 0.1;
+          
+          activeMaterialSettings.dirLightColor.setHex(0xfff2e6);
+          activeMaterialSettings.dirLightIntensity = 1.0;
+          break;
+        case "ABOUT":
+          activeMaterialSettings.color.setHex(0xffffff); // Bright white
+          activeMaterialSettings.roughness = 0.45;
+          activeMaterialSettings.metalness = 0.35;
+          activeMaterialSettings.emissive.setHex(0x000000);
+          activeMaterialSettings.bloomStrength = lowPerfMode ? 0.0 : 0.2;
+          
+          activeMaterialSettings.rimLeftColor.setHex(0xffffff);
+          activeMaterialSettings.rimLeftIntensity = 0.4;
+          activeMaterialSettings.rimRightColor.setHex(0xe6f2ff);
+          activeMaterialSettings.rimRightIntensity = 0.3;
+          
+          activeMaterialSettings.dirLightColor.setHex(0xffffff);
+          activeMaterialSettings.dirLightIntensity = 1.3;
+          break;
+        case "SKILLS":
+          activeMaterialSettings.color.setHex(0xc0c0c0); // Metallic silver
+          activeMaterialSettings.roughness = 0.2;
+          activeMaterialSettings.metalness = 0.9;
+          activeMaterialSettings.emissive.setHex(0x001133); // Blue accents
+          activeMaterialSettings.bloomStrength = lowPerfMode ? 0.0 : 0.35;
+          
+          activeMaterialSettings.rimLeftColor.setHex(0x00a8cc);
+          activeMaterialSettings.rimLeftIntensity = 1.2;
+          activeMaterialSettings.rimRightColor.setHex(0x0055ff);
+          activeMaterialSettings.rimRightIntensity = 0.6;
+          
+          activeMaterialSettings.dirLightColor.setHex(0xe6f2ff);
+          activeMaterialSettings.dirLightIntensity = 1.0;
+          break;
+        case "PROJECTS":
+          activeMaterialSettings.color.setHex(0xffd8b3); // Sunset orange
+          activeMaterialSettings.roughness = 0.3;
+          activeMaterialSettings.metalness = 0.8;
+          activeMaterialSettings.emissive.setHex(0x331100); 
+          activeMaterialSettings.bloomStrength = lowPerfMode ? 0.0 : 0.45;
+          
+          activeMaterialSettings.rimLeftColor.setHex(0xff7f00);
+          activeMaterialSettings.rimLeftIntensity = 1.6;
+          activeMaterialSettings.rimRightColor.setHex(0xff3300);
+          activeMaterialSettings.rimRightIntensity = 1.0;
+          
+          activeMaterialSettings.dirLightColor.setHex(0xffb86c);
+          activeMaterialSettings.dirLightIntensity = 1.5;
+          break;
+        case "EXPERIENCE":
+          activeMaterialSettings.color.setHex(0xe0f7fa); // Cool cyan
+          activeMaterialSettings.roughness = 0.25;
+          activeMaterialSettings.metalness = 0.8;
+          activeMaterialSettings.emissive.setHex(0x002233);
+          activeMaterialSettings.bloomStrength = lowPerfMode ? 0.0 : 0.3;
+          
+          activeMaterialSettings.rimLeftColor.setHex(0x00e5ff);
+          activeMaterialSettings.rimLeftIntensity = 1.5;
+          activeMaterialSettings.rimRightColor.setHex(0x00838f);
+          activeMaterialSettings.rimRightIntensity = 0.8;
+          
+          activeMaterialSettings.dirLightColor.setHex(0xe0f7fa);
+          activeMaterialSettings.dirLightIntensity = 1.1;
+          break;
+        case "CONTACT":
+          activeMaterialSettings.color.setHex(0x0a1128); // Deep blue
+          activeMaterialSettings.roughness = 0.15;
+          activeMaterialSettings.metalness = 0.95;
+          activeMaterialSettings.emissive.setHex(0x00a8cc); // Emissive cyan glow
+          activeMaterialSettings.bloomStrength = lowPerfMode ? 0.0 : 0.95; // Stronger bloom
+          
+          activeMaterialSettings.rimLeftColor.setHex(0x00f0ff);
+          activeMaterialSettings.rimLeftIntensity = 2.8;
+          activeMaterialSettings.rimRightColor.setHex(0x005f73);
+          activeMaterialSettings.rimRightIntensity = 1.4;
+          
+          activeMaterialSettings.dirLightColor.setHex(0x00a8cc);
+          activeMaterialSettings.dirLightIntensity = 0.25;
+          break;
+      }
+
+      // Smoothly interpolate PBR material properties (approx 1.0 sec transition)
+      const interpFactor = 0.04;
+      currentMaterialSettings.color.lerp(activeMaterialSettings.color, interpFactor);
+      currentMaterialSettings.roughness = THREE.MathUtils.lerp(currentMaterialSettings.roughness, activeMaterialSettings.roughness, interpFactor);
+      currentMaterialSettings.metalness = THREE.MathUtils.lerp(currentMaterialSettings.metalness, activeMaterialSettings.metalness, interpFactor);
+      currentMaterialSettings.emissive.lerp(activeMaterialSettings.emissive, interpFactor);
+
+      fuselageMaterial.color.copy(currentMaterialSettings.color);
+      fuselageMaterial.roughness = currentMaterialSettings.roughness;
+      fuselageMaterial.metalness = currentMaterialSettings.metalness;
+      fuselageMaterial.emissive.copy(currentMaterialSettings.emissive);
+
+      // Interpolate bloom and light attributes
+      if (!lowPerfMode) {
+        bloomPass.strength = THREE.MathUtils.lerp(bloomPass.strength, activeMaterialSettings.bloomStrength, interpFactor);
+      }
+      rimLightLeft.color.lerp(activeMaterialSettings.rimLeftColor, interpFactor);
+      rimLightLeft.intensity = THREE.MathUtils.lerp(rimLightLeft.intensity, activeMaterialSettings.rimLeftIntensity, interpFactor);
+
+      rimLightRight.color.lerp(activeMaterialSettings.rimRightColor, interpFactor);
+      rimLightRight.intensity = THREE.MathUtils.lerp(rimLightRight.intensity, activeMaterialSettings.rimRightIntensity, interpFactor);
+
+      dirLight.color.lerp(activeMaterialSettings.dirLightColor, interpFactor);
+      dirLight.intensity = THREE.MathUtils.lerp(dirLight.intensity, activeMaterialSettings.dirLightIntensity, interpFactor);
+
+      // Render scene via composer pass chain
+      composer.render();
     };
 
     renderLoop();
