@@ -650,258 +650,49 @@ document.addEventListener("DOMContentLoaded", () => {
       engine: engineMaterial
     };
 
-    // --- Aviation Flashing Navigation Lights & Beacons ---
     const navLights = [];
-    const createNavBeacon = (x, y, z, colorHex, isBeacon, isStrobe) => {
-      const geom = new THREE.SphereGeometry(0.15, 8, 8);
-      const mat = new THREE.MeshBasicMaterial({ color: colorHex });
-      const mesh = new THREE.Mesh(geom, mat);
-      mesh.position.set(x, y, z);
-      
-      const pLight = new THREE.PointLight(colorHex, 0, 10);
-      mesh.add(pLight);
-      
-      airplaneGroup.add(mesh);
-      navLights.push({
-        mesh,
-        pLight,
-        color: colorHex,
-        isBeacon,
-        isStrobe,
-        intensity: 2.0
-      });
-    };
-
-    // Port/Starboard Navigation lights (Left Red, Right Green)
-    createNavBeacon(-14.5, -0.4, -4.5, 0xff0000, false, false); 
-    createNavBeacon(14.5, -0.4, -4.5, 0x00ff00, false, false);
-    
-    // Wingtip Strobes (Flashing rapid white strobe)
-    createNavBeacon(-14.6, -0.38, -4.6, 0xffffff, false, true);
-    createNavBeacon(14.6, -0.38, -4.6, 0xffffff, false, true);
-
-    // Fuselage Beacons (Flashing slow red beacon on top & bottom)
-    createNavBeacon(0, 1.6, 0, 0xff0000, true, false); 
-    createNavBeacon(0, -1.6, 0, 0xff0000, true, false);
-
-    // --- Turbofan Rotation Groups ---
     const fans = [];
-    const createEngineTurbine = (x, y, z) => {
-      const engGroup = new THREE.Group();
-      engGroup.position.set(x, y, z);
 
-      // Cowling
-      const cowlGeom = new THREE.CylinderGeometry(0.52, 0.42, 1.8, 16);
-      cowlGeom.rotateX(Math.PI / 2);
-      const cowlMesh = new THREE.Mesh(cowlGeom, engineMaterial);
-      cowlMesh.castShadow = true;
-      cowlMesh.receiveShadow = true;
-      engGroup.add(cowlMesh);
-
-      // Fan Blades Assembly
-      const fanGroup = new THREE.Group();
-      fanGroup.position.set(0, 0, 0.85);
-
-      const bladeGeom = new THREE.BoxGeometry(0.85, 0.1, 0.05);
-      for (let i = 0; i < 8; i++) {
-        const blade = new THREE.Mesh(bladeGeom, windshieldMaterial);
-        blade.rotation.z = (Math.PI / 4) * i;
-        fanGroup.add(blade);
-      }
-      engGroup.add(fanGroup);
-      fans.push(fanGroup);
-
-      // Exhaust cone
-      const exGeom = new THREE.ConeGeometry(0.32, 0.6, 12);
-      exGeom.rotateX(-Math.PI / 2);
-      exGeom.translate(0, 0, -1.05);
-      const exMesh = new THREE.Mesh(exGeom, exhaustMaterial);
-      engGroup.add(exMesh);
-
-      airplaneGroup.add(engGroup);
-    };
-
-    // --- GLTF Loading with Procedural Fallback ---
+    // --- GLTF Loading (No procedural geometry creation) ---
     const loader = new THREE.GLTFLoader();
     const dracoLoader = new THREE.DRACOLoader();
     dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.4.3/");
     loader.setDRACOLoader(dracoLoader);
 
-    const modelUrl = "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/scenegraph-layer/airplane.glb";
+    // Target the local A380 model file in the workspace root
+    const modelUrl = "a380.glb";
     let loadedMesh = null;
-
-    // Helper to build fallback procedural A380 meshes
-    const buildProceduralModel = () => {
-      const bodyGeom = new THREE.CylinderGeometry(1.5, 1.5, 17, 32);
-      bodyGeom.rotateX(Math.PI / 2);
-      const bodyMesh = new THREE.Mesh(bodyGeom, fuselageMaterial);
-      bodyMesh.castShadow = true;
-      bodyMesh.receiveShadow = true;
-      airplaneGroup.add(bodyMesh);
-
-      const windGeom = new THREE.SphereGeometry(1.52, 32, 16, 0, Math.PI * 2, 0.05, 0.45);
-      windGeom.rotateX(-Math.PI / 7);
-      windGeom.translate(0, 0.25, 8.1);
-      const windMesh = new THREE.Mesh(windGeom, windshieldMaterial);
-      airplaneGroup.add(windMesh);
-
-      const noseGeom = new THREE.ConeGeometry(1.5, 3.2, 32);
-      noseGeom.rotateX(-Math.PI / 2);
-      noseGeom.translate(0, 0, 10.1);
-      const noseMesh = new THREE.Mesh(noseGeom, fuselageMaterial);
-      noseMesh.castShadow = true;
-      noseMesh.receiveShadow = true;
-      airplaneGroup.add(noseMesh);
-
-      const tailGeom = new THREE.ConeGeometry(1.5, 4.2, 32);
-      tailGeom.rotateX(Math.PI / 2);
-      tailGeom.translate(0, 0, -10.6);
-      const tailMesh = new THREE.Mesh(tailGeom, fuselageMaterial);
-      tailMesh.castShadow = true;
-      tailMesh.receiveShadow = true;
-      airplaneGroup.add(tailMesh);
-
-      const wingShapeL = new THREE.Shape();
-      wingShapeL.moveTo(0, 0);
-      wingShapeL.lineTo(-14.5, -4.5);
-      wingShapeL.lineTo(-14.5, -5.5);
-      wingShapeL.lineTo(0, -3.6);
-      wingShapeL.lineTo(0, 0);
-      const leftWingGeom = new THREE.ExtrudeGeometry(wingShapeL, {
-        depth: 0.15,
-        bevelEnabled: true,
-        bevelThickness: 0.08,
-        bevelSize: 0.05,
-        bevelSegments: 3
-      });
-      leftWingGeom.rotateX(Math.PI / 2);
-      leftWingGeom.translate(-0.8, 0, 0.5);
-      const leftWingMesh = new THREE.Mesh(leftWingGeom, fuselageMaterial);
-      leftWingMesh.rotation.z = Math.PI / 24;
-      leftWingMesh.castShadow = true;
-      leftWingMesh.receiveShadow = true;
-      airplaneGroup.add(leftWingMesh);
-
-      const wingShapeR = new THREE.Shape();
-      wingShapeR.moveTo(0, 0);
-      wingShapeR.lineTo(14.5, -4.5);
-      wingShapeR.lineTo(14.5, -5.5);
-      wingShapeR.lineTo(0, -3.6);
-      wingShapeR.lineTo(0, 0);
-      const rightWingGeom = new THREE.ExtrudeGeometry(wingShapeR, {
-        depth: 0.15,
-        bevelEnabled: true,
-        bevelThickness: 0.08,
-        bevelSize: 0.05,
-        bevelSegments: 3
-      });
-      rightWingGeom.rotateX(Math.PI / 2);
-      rightWingGeom.translate(0.8, 0, 0.5);
-      const rightWingMesh = new THREE.Mesh(rightWingGeom, fuselageMaterial);
-      rightWingMesh.rotation.z = -Math.PI / 24;
-      rightWingMesh.castShadow = true;
-      rightWingMesh.receiveShadow = true;
-      airplaneGroup.add(rightWingMesh);
-
-      const finShape = new THREE.Shape();
-      finShape.moveTo(0, 0);
-      finShape.lineTo(0, 4.8);
-      finShape.lineTo(-2.4, 4.3);
-      finShape.lineTo(-3.4, 0);
-      finShape.lineTo(0, 0);
-      const finGeom = new THREE.ExtrudeGeometry(finShape, {
-        depth: 0.12,
-        bevelEnabled: true,
-        bevelThickness: 0.05,
-        bevelSize: 0.04,
-        bevelSegments: 2
-      });
-      finGeom.translate(0, 0, -8.2);
-      const finMesh = new THREE.Mesh(finGeom, fuselageMaterial);
-      finMesh.castShadow = true;
-      finMesh.receiveShadow = true;
-      airplaneGroup.add(finMesh);
-
-      const stabLeftShape = new THREE.Shape();
-      stabLeftShape.moveTo(0, 0);
-      stabLeftShape.lineTo(-4.5, -1.8);
-      stabLeftShape.lineTo(-4.5, -2.4);
-      stabLeftShape.lineTo(0, -1.6);
-      stabLeftShape.lineTo(0, 0);
-      const stabLeftGeom = new THREE.ExtrudeGeometry(stabLeftShape, {
-        depth: 0.08,
-        bevelEnabled: true,
-        bevelThickness: 0.04,
-        bevelSize: 0.03,
-        bevelSegments: 2
-      });
-      stabLeftGeom.rotateX(Math.PI / 2);
-      stabLeftGeom.translate(-0.5, 0.15, -9.2);
-      const stabLeftMesh = new THREE.Mesh(stabLeftGeom, fuselageMaterial);
-      stabLeftMesh.castShadow = true;
-      stabLeftMesh.receiveShadow = true;
-      airplaneGroup.add(stabLeftMesh);
-
-      const stabRightShape = new THREE.Shape();
-      stabRightShape.moveTo(0, 0);
-      stabRightShape.lineTo(4.5, -1.8);
-      stabRightShape.lineTo(4.5, -2.4);
-      stabRightShape.lineTo(0, -1.6);
-      stabRightShape.lineTo(0, 0);
-      const stabRightGeom = new THREE.ExtrudeGeometry(stabRightShape, {
-        depth: 0.08,
-        bevelEnabled: true,
-        bevelThickness: 0.04,
-        bevelSize: 0.03,
-        bevelSegments: 2
-      });
-      stabRightGeom.rotateX(Math.PI / 2);
-      stabRightGeom.translate(0.5, 0.15, -9.2);
-      const stabRightMesh = new THREE.Mesh(stabRightGeom, fuselageMaterial);
-      stabRightMesh.castShadow = true;
-      stabRightMesh.receiveShadow = true;
-      airplaneGroup.add(stabRightMesh);
-
-      // Create turbines
-      createEngineTurbine(-3.5, -0.4, 0.5);
-      createEngineTurbine(3.5, -0.4, 0.5);
-      createEngineTurbine(-7, -0.25, 1.3);
-      createEngineTurbine(7, -0.25, 1.3);
-    };
 
     loader.load(
       modelUrl,
       (gltf) => {
         loadedMesh = gltf.scene;
         
-        // Keynote 65%-75% screen visible ratio scale
+        // Keynote scale & placement
         loadedMesh.scale.setScalar(0.18);
         loadedMesh.rotation.set(Math.PI / 2, 0, Math.PI);
         loadedMesh.position.set(0, 0, 0);
 
+        // Apply realistic PBR materials, shadows, and opacity
         loadedMesh.traverse((node) => {
           if (node.isMesh) {
             node.castShadow = true;
             node.receiveShadow = true;
+            
+            // Set material properties
             node.material = fuselageMaterial;
+            node.material.transparent = true;
+            node.material.opacity = 0.20; // 0.15–0.20 opacity as requested
           }
         });
 
         airplaneGroup.add(loadedMesh);
         window.a380Model = loadedMesh;
-
-        // Build detailed fan turbines underneath GLTF wings
-        createEngineTurbine(-3.5, -0.4, 0.5);
-        createEngineTurbine(3.5, -0.4, 0.5);
-        createEngineTurbine(-7, -0.25, 1.3);
-        createEngineTurbine(7, -0.25, 1.3);
-
-        console.log("Premium 3D Airbus A380 loaded successfully.");
+        console.log("Real Airbus A380 GLB model loaded successfully.");
       },
       undefined,
       (err) => {
-        console.warn("Draco GLTF failed. Loading procedural engine model fallback.", err);
-        buildProceduralModel();
+        console.warn("A380 model file 'a380.glb' not found or failed to load. Waiting for user to provide the file.", err);
       }
     );
 
