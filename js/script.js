@@ -234,20 +234,57 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
-      // A380 3D wireframe color transition based on scroll position
-      if (window.a380Material) {
+      // A380 3D shaded model lighting & color transition based on scroll position
+      if (window.a380Lights && window.a380Materials) {
+        const lights = window.a380Lights;
+        const mats = window.a380Materials;
+
         if (progress < 0.2) {
-          // Top: Light background - transition to deep indigo/black for contrast
-          window.a380Material.color.setHex(0x12072b);
-          window.a380Material.opacity = 0.12;
+          // Top Zone: Peach/Gold Sunrise Background - needs warm lighting & dark contrast accents
+          lights.ambient.color.setHex(0xffb86c);
+          lights.ambient.intensity = 0.55;
+          
+          lights.directional.color.setHex(0xfff2e6);
+          lights.directional.intensity = 1.1;
+          
+          lights.cyan.intensity = 0.0;
+          lights.magenta.intensity = 0.0;
+
+          mats.fuselage.color.setHex(0xaaaaaa);
+          mats.fuselage.roughness = 0.35;
+          mats.fuselage.metalness = 0.65;
         } else if (progress < 0.55) {
-          // Mid: Blue background - transition to clean white
-          window.a380Material.color.setHex(0xffffff);
-          window.a380Material.opacity = 0.15;
+          // Mid Zone: Sky Blue Background - bright, clean daylight reflections
+          lights.ambient.color.setHex(0xffffff);
+          lights.ambient.intensity = 0.65;
+          
+          lights.directional.color.setHex(0xe6f2ff);
+          lights.directional.intensity = 1.3;
+          
+          lights.cyan.intensity = 0.45;
+          lights.cyan.color.setHex(0x00f0ff);
+          lights.magenta.intensity = 0.25;
+          lights.magenta.color.setHex(0xff007f);
+
+          mats.fuselage.color.setHex(0xdddddd);
+          mats.fuselage.roughness = 0.25;
+          mats.fuselage.metalness = 0.8;
         } else {
-          // Bottom: Deep space background - transition to glowing cyan
-          window.a380Material.color.setHex(0x00f0ff);
-          window.a380Material.opacity = 0.20;
+          // Bottom Zone: Deep Space/Night Background - high contrast neon cockpit rim lights
+          lights.ambient.color.setHex(0x1a0d33);
+          lights.ambient.intensity = 0.2;
+          
+          lights.directional.color.setHex(0x00f0ff);
+          lights.directional.intensity = 0.4;
+          
+          lights.cyan.intensity = 2.2;
+          lights.cyan.color.setHex(0x00f0ff);
+          lights.magenta.intensity = 1.8;
+          lights.magenta.color.setHex(0xff007f);
+
+          mats.fuselage.color.setHex(0x2c1f4d);
+          mats.fuselage.roughness = 0.15;
+          mats.fuselage.metalness = 0.95;
         }
       }
 
@@ -492,101 +529,232 @@ document.addEventListener("DOMContentLoaded", () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+    // --- Dynamic Light Rig ---
+    // Ambient Light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    // Directional Sun Light
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    dirLight.position.set(5, 15, 10);
+    scene.add(dirLight);
+
+    // Neon Left Rim Light (Cyan)
+    const cyanLight = new THREE.PointLight(0x00f0ff, 0, 80);
+    cyanLight.position.set(-20, -5, 5);
+    scene.add(cyanLight);
+
+    // Neon Right Rim Light (Magenta)
+    const magentaLight = new THREE.PointLight(0xff007f, 0, 80);
+    magentaLight.position.set(20, 5, -5);
+    scene.add(magentaLight);
+
+    // Expose lights to window context for scroll animations
+    window.a380Lights = {
+      ambient: ambientLight,
+      directional: dirLight,
+      cyan: cyanLight,
+      magenta: magentaLight
+    };
+
     // Root Group
     const airplaneGroup = new THREE.Group();
     scene.add(airplaneGroup);
 
-    // Global wireframe material
-    const baseColor = new THREE.Color(0x12072b);
-    const airplaneMaterial = new THREE.MeshBasicMaterial({
-      color: baseColor,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.12
+    // --- Standard Shaded Materials ---
+    // Fuselage / Wings material
+    const fuselageMaterial = new THREE.MeshStandardMaterial({
+      color: 0xcccccc,
+      roughness: 0.35,
+      metalness: 0.65,
+      flatShading: false
     });
+
+    // Windshield glass material
+    const windshieldMaterial = new THREE.MeshStandardMaterial({
+      color: 0x0c071e,
+      roughness: 0.1,
+      metalness: 0.95
+    });
+
+    // Jet Engine metal material
+    const engineMaterial = new THREE.MeshStandardMaterial({
+      color: 0x555555,
+      roughness: 0.4,
+      metalness: 0.8
+    });
+
+    // Glowing exhaust plume material
+    const exhaustMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00f0ff
+    });
+
+    // Expose materials to window context for scroll animations
+    window.a380Materials = {
+      fuselage: fuselageMaterial,
+      windshield: windshieldMaterial,
+      engine: engineMaterial
+    };
 
     // --- Constructing A380 Procedural Geometry ---
     
-    // Fuselage (Stretched Cylinder)
-    const bodyGeom = new THREE.CylinderGeometry(1.5, 1.5, 18, 16);
+    // Fuselage (Stretched Cylinder - double decker scale)
+    const bodyGeom = new THREE.CylinderGeometry(1.5, 1.5, 17, 32);
     bodyGeom.rotateX(Math.PI / 2); // Align along Z (front-to-back)
-    const bodyMesh = new THREE.Mesh(bodyGeom, airplaneMaterial);
+    const bodyMesh = new THREE.Mesh(bodyGeom, fuselageMaterial);
     airplaneGroup.add(bodyMesh);
 
+    // Cockpit windshield (Contouring overlay mesh on nose)
+    const windGeom = new THREE.SphereGeometry(1.52, 32, 16, 0, Math.PI * 2, 0.05, 0.45);
+    windGeom.rotateX(-Math.PI / 7);
+    windGeom.translate(0, 0.25, 8.1);
+    const windMesh = new THREE.Mesh(windGeom, windshieldMaterial);
+    airplaneGroup.add(windMesh);
+
     // Nose Cone
-    const noseGeom = new THREE.ConeGeometry(1.5, 3.5, 16);
+    const noseGeom = new THREE.ConeGeometry(1.5, 3.2, 32);
     noseGeom.rotateX(-Math.PI / 2);
-    noseGeom.translate(0, 0, 10.75);
-    const noseMesh = new THREE.Mesh(noseGeom, airplaneMaterial);
+    noseGeom.translate(0, 0, 10.1);
+    const noseMesh = new THREE.Mesh(noseGeom, fuselageMaterial);
     airplaneGroup.add(noseMesh);
 
     // Tail Cone
-    const tailGeom = new THREE.ConeGeometry(1.5, 4.5, 16);
+    const tailGeom = new THREE.ConeGeometry(1.5, 4.2, 32);
     tailGeom.rotateX(Math.PI / 2);
-    tailGeom.translate(0, 0, -11.25);
-    const tailMesh = new THREE.Mesh(tailGeom, airplaneMaterial);
+    tailGeom.translate(0, 0, -10.6);
+    const tailMesh = new THREE.Mesh(tailGeom, fuselageMaterial);
     airplaneGroup.add(tailMesh);
 
-    // Left Main Wing
-    const leftWingGeom = new THREE.BoxGeometry(16, 0.1, 2.5);
-    leftWingGeom.translate(-8, 0, 0); // Pivot at wing root
-    const leftWingMesh = new THREE.Mesh(leftWingGeom, airplaneMaterial);
-    leftWingMesh.position.set(-0.8, 0, -1);
-    leftWingMesh.rotation.y = -Math.PI / 6; // Sweep back angle
+    // Left Main Wing (Realistic swept-back beveled ExtrudeGeometry)
+    const wingShapeL = new THREE.Shape();
+    wingShapeL.moveTo(0, 0);
+    wingShapeL.lineTo(-14.5, -4.5); // Swept back tip
+    wingShapeL.lineTo(-14.5, -5.5); // Tip width
+    wingShapeL.lineTo(0, -3.6);
+    wingShapeL.lineTo(0, 0);
+    const leftWingGeom = new THREE.ExtrudeGeometry(wingShapeL, {
+      depth: 0.15,
+      bevelEnabled: true,
+      bevelThickness: 0.08,
+      bevelSize: 0.05,
+      bevelSegments: 3
+    });
+    leftWingGeom.rotateX(Math.PI / 2);
+    leftWingGeom.translate(-0.8, 0, 0.5);
+    const leftWingMesh = new THREE.Mesh(leftWingGeom, fuselageMaterial);
     leftWingMesh.rotation.z = Math.PI / 24;  // Dihedral angle (tilt up)
     airplaneGroup.add(leftWingMesh);
 
-    // Right Main Wing
-    const rightWingGeom = new THREE.BoxGeometry(16, 0.1, 2.5);
-    rightWingGeom.translate(8, 0, 0); // Pivot at wing root
-    const rightWingMesh = new THREE.Mesh(rightWingGeom, airplaneMaterial);
-    rightWingMesh.position.set(0.8, 0, -1);
-    rightWingMesh.rotation.y = Math.PI / 6;  // Sweep back angle
+    // Right Main Wing (Realistic swept-back beveled ExtrudeGeometry)
+    const wingShapeR = new THREE.Shape();
+    wingShapeR.moveTo(0, 0);
+    wingShapeR.lineTo(14.5, -4.5); // Swept back tip
+    wingShapeR.lineTo(14.5, -5.5); // Tip width
+    wingShapeR.lineTo(0, -3.6);
+    wingShapeR.lineTo(0, 0);
+    const rightWingGeom = new THREE.ExtrudeGeometry(wingShapeR, {
+      depth: 0.15,
+      bevelEnabled: true,
+      bevelThickness: 0.08,
+      bevelSize: 0.05,
+      bevelSegments: 3
+    });
+    rightWingGeom.rotateX(Math.PI / 2);
+    rightWingGeom.translate(0.8, 0, 0.5);
+    const rightWingMesh = new THREE.Mesh(rightWingGeom, fuselageMaterial);
     rightWingMesh.rotation.z = -Math.PI / 24; // Dihedral angle (tilt up)
     airplaneGroup.add(rightWingMesh);
 
     // Vertical Stabilizer (Tail Fin)
-    const finGeom = new THREE.BoxGeometry(0.1, 5, 3);
-    finGeom.translate(0, 2.5, -1.2);
-    const finMesh = new THREE.Mesh(finGeom, airplaneMaterial);
-    finMesh.position.set(0, 1, -9);
-    finMesh.rotation.x = -Math.PI / 10;
+    const finShape = new THREE.Shape();
+    finShape.moveTo(0, 0);
+    finShape.lineTo(0, 4.8);
+    finShape.lineTo(-2.4, 4.3);
+    finShape.lineTo(-3.4, 0);
+    finShape.lineTo(0, 0);
+    const finGeom = new THREE.ExtrudeGeometry(finShape, {
+      depth: 0.12,
+      bevelEnabled: true,
+      bevelThickness: 0.05,
+      bevelSize: 0.04,
+      bevelSegments: 2
+    });
+    finGeom.translate(0, 0, -8.2);
+    const finMesh = new THREE.Mesh(finGeom, fuselageMaterial);
     airplaneGroup.add(finMesh);
 
     // Horizontal Stabilizers
-    const stabLeftGeom = new THREE.BoxGeometry(5, 0.08, 1.5);
-    stabLeftGeom.translate(-2.5, 0, 0);
-    const stabLeftMesh = new THREE.Mesh(stabLeftGeom, airplaneMaterial);
-    stabLeftMesh.position.set(-0.5, 0.1, -10);
-    stabLeftMesh.rotation.y = -Math.PI / 8;
+    const stabLeftShape = new THREE.Shape();
+    stabLeftShape.moveTo(0, 0);
+    stabLeftShape.lineTo(-4.5, -1.8);
+    stabLeftShape.lineTo(-4.5, -2.4);
+    stabLeftShape.lineTo(0, -1.6);
+    stabLeftShape.lineTo(0, 0);
+    const stabLeftGeom = new THREE.ExtrudeGeometry(stabLeftShape, {
+      depth: 0.08,
+      bevelEnabled: true,
+      bevelThickness: 0.04,
+      bevelSize: 0.03,
+      bevelSegments: 2
+    });
+    stabLeftGeom.rotateX(Math.PI / 2);
+    stabLeftGeom.translate(-0.5, 0.15, -9.2);
+    const stabLeftMesh = new THREE.Mesh(stabLeftGeom, fuselageMaterial);
     airplaneGroup.add(stabLeftMesh);
 
-    const stabRightGeom = new THREE.BoxGeometry(5, 0.08, 1.5);
-    stabRightGeom.translate(2.5, 0, 0);
-    const stabRightMesh = new THREE.Mesh(stabRightGeom, airplaneMaterial);
-    stabRightMesh.position.set(0.5, 0.1, -10);
-    stabRightMesh.rotation.y = Math.PI / 8;
+    const stabRightShape = new THREE.Shape();
+    stabRightShape.moveTo(0, 0);
+    stabRightShape.lineTo(4.5, -1.8);
+    stabRightShape.lineTo(4.5, -2.4);
+    stabRightShape.lineTo(0, -1.6);
+    stabRightShape.lineTo(0, 0);
+    const stabRightGeom = new THREE.ExtrudeGeometry(stabRightShape, {
+      depth: 0.08,
+      bevelEnabled: true,
+      bevelThickness: 0.04,
+      bevelSize: 0.03,
+      bevelSegments: 2
+    });
+    stabRightGeom.rotateX(Math.PI / 2);
+    stabRightGeom.translate(0.5, 0.15, -9.2);
+    const stabRightMesh = new THREE.Mesh(stabRightGeom, fuselageMaterial);
     airplaneGroup.add(stabRightMesh);
 
-    // Quad Turbofans (A380 Signature Engines)
-    const createEngine = (x, y, z) => {
-      const engineGeom = new THREE.CylinderGeometry(0.6, 0.6, 2.2, 8);
-      engineGeom.rotateX(Math.PI / 2);
-      const engineMesh = new THREE.Mesh(engineGeom, airplaneMaterial);
-      engineMesh.position.set(x, y, z);
-      airplaneGroup.add(engineMesh);
+    // 4 Under-wing Turbofans (Detailed Engine Groups)
+    const createDetailedEngine = (x, y, z) => {
+      const engGroup = new THREE.Group();
+      engGroup.position.set(x, y, z);
+
+      // Cowling (outer shell)
+      const cowlGeom = new THREE.CylinderGeometry(0.52, 0.42, 1.8, 16);
+      cowlGeom.rotateX(Math.PI / 2);
+      const cowlMesh = new THREE.Mesh(cowlGeom, engineMaterial);
+      engGroup.add(cowlMesh);
+
+      // Fan (dark face inside cowling)
+      const fanGeom = new THREE.CylinderGeometry(0.38, 0.38, 0.1, 16);
+      fanGeom.rotateX(Math.PI / 2);
+      fanGeom.translate(0, 0, 0.85);
+      const fanMesh = new THREE.Mesh(fanGeom, windshieldMaterial);
+      engGroup.add(fanMesh);
+
+      // Exhaust cone with neon cyan glow
+      const exGeom = new THREE.ConeGeometry(0.32, 0.6, 12);
+      exGeom.rotateX(-Math.PI / 2);
+      exGeom.translate(0, 0, -1.05);
+      const exMesh = new THREE.Mesh(exGeom, exhaustMaterial);
+      engGroup.add(exMesh);
+
+      airplaneGroup.add(engGroup);
     };
 
-    createEngine(-3.5, -0.4, 0.8);
-    createEngine(3.5, -0.4, 0.8);
-    createEngine(-7, -0.2, 1.7);
-    createEngine(7, -0.2, 1.7);
+    createDetailedEngine(-3.5, -0.4, 0.5);
+    createDetailedEngine(3.5, -0.4, 0.5);
+    createDetailedEngine(-7, -0.25, 1.3);
+    createDetailedEngine(7, -0.25, 1.3);
 
     // Initial 3D Tilt perspective position
     airplaneGroup.rotation.set(0.2, -0.6, 0.15);
-
-    // Expose to window context for scroll manipulation
-    window.a380Material = airplaneMaterial;
 
     // --- Interactive Mouse Drag Rotations ---
     let isDragging = false;
