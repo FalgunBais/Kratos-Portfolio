@@ -234,16 +234,20 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
 
-      // A380 background color adaptation based on scroll position
-      const a380El = document.getElementById("a380Bg");
-      if (a380El) {
-        a380El.classList.remove("a380-light", "a380-mid", "a380-dark");
+      // A380 3D wireframe color transition based on scroll position
+      if (window.a380Material) {
         if (progress < 0.2) {
-          a380El.classList.add("a380-light");   // sunrise/gold background
+          // Top: Light background - transition to deep indigo/black for contrast
+          window.a380Material.color.setHex(0x12072b);
+          window.a380Material.opacity = 0.12;
         } else if (progress < 0.55) {
-          a380El.classList.add("a380-mid");      // sky-blue background
+          // Mid: Blue background - transition to clean white
+          window.a380Material.color.setHex(0xffffff);
+          window.a380Material.opacity = 0.15;
         } else {
-          a380El.classList.add("a380-dark");     // deep indigo/space background
+          // Bottom: Deep space background - transition to glowing cyan
+          window.a380Material.color.setHex(0x00f0ff);
+          window.a380Material.opacity = 0.20;
         }
       }
 
@@ -456,4 +460,199 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
+  // 3D Three.js Airbus A380 Background Integration
+  const init3DAirplane = () => {
+    const canvas = document.getElementById("a380Canvas");
+    if (!canvas) return;
+
+    if (typeof THREE === "undefined") {
+      console.warn("Three.js not loaded. WebGL A380 rendering skipped.");
+      return;
+    }
+
+    // Scene setup
+    const scene = new THREE.Scene();
+
+    // Camera setup
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
+    camera.position.set(0, 0, 30);
+
+    // Renderer setup
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvas,
+      alpha: true, // Transparent context to let sunset/sky gradients show
+      antialias: true
+    });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Root Group
+    const airplaneGroup = new THREE.Group();
+    scene.add(airplaneGroup);
+
+    // Global wireframe material
+    const baseColor = new THREE.Color(0x12072b);
+    const airplaneMaterial = new THREE.MeshBasicMaterial({
+      color: baseColor,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.12
+    });
+
+    // --- Constructing A380 Procedural Geometry ---
+    
+    // Fuselage (Stretched Cylinder)
+    const bodyGeom = new THREE.CylinderGeometry(1.5, 1.5, 18, 16);
+    bodyGeom.rotateX(Math.PI / 2); // Align along Z (front-to-back)
+    const bodyMesh = new THREE.Mesh(bodyGeom, airplaneMaterial);
+    airplaneGroup.add(bodyMesh);
+
+    // Nose Cone
+    const noseGeom = new THREE.ConeGeometry(1.5, 3.5, 16);
+    noseGeom.rotateX(-Math.PI / 2);
+    noseGeom.translate(0, 0, 10.75);
+    const noseMesh = new THREE.Mesh(noseGeom, airplaneMaterial);
+    airplaneGroup.add(noseMesh);
+
+    // Tail Cone
+    const tailGeom = new THREE.ConeGeometry(1.5, 4.5, 16);
+    tailGeom.rotateX(Math.PI / 2);
+    tailGeom.translate(0, 0, -11.25);
+    const tailMesh = new THREE.Mesh(tailGeom, airplaneMaterial);
+    airplaneGroup.add(tailMesh);
+
+    // Left Main Wing
+    const leftWingGeom = new THREE.BoxGeometry(16, 0.1, 2.5);
+    leftWingGeom.translate(-8, 0, 0); // Pivot at wing root
+    const leftWingMesh = new THREE.Mesh(leftWingGeom, airplaneMaterial);
+    leftWingMesh.position.set(-0.8, 0, -1);
+    leftWingMesh.rotation.y = -Math.PI / 6; // Sweep back angle
+    leftWingMesh.rotation.z = Math.PI / 24;  // Dihedral angle (tilt up)
+    airplaneGroup.add(leftWingMesh);
+
+    // Right Main Wing
+    const rightWingGeom = new THREE.BoxGeometry(16, 0.1, 2.5);
+    rightWingGeom.translate(8, 0, 0); // Pivot at wing root
+    const rightWingMesh = new THREE.Mesh(rightWingGeom, airplaneMaterial);
+    rightWingMesh.position.set(0.8, 0, -1);
+    rightWingMesh.rotation.y = Math.PI / 6;  // Sweep back angle
+    rightWingMesh.rotation.z = -Math.PI / 24; // Dihedral angle (tilt up)
+    airplaneGroup.add(rightWingMesh);
+
+    // Vertical Stabilizer (Tail Fin)
+    const finGeom = new THREE.BoxGeometry(0.1, 5, 3);
+    finGeom.translate(0, 2.5, -1.2);
+    const finMesh = new THREE.Mesh(finGeom, airplaneMaterial);
+    finMesh.position.set(0, 1, -9);
+    finMesh.rotation.x = -Math.PI / 10;
+    airplaneGroup.add(finMesh);
+
+    // Horizontal Stabilizers
+    const stabLeftGeom = new THREE.BoxGeometry(5, 0.08, 1.5);
+    stabLeftGeom.translate(-2.5, 0, 0);
+    const stabLeftMesh = new THREE.Mesh(stabLeftGeom, airplaneMaterial);
+    stabLeftMesh.position.set(-0.5, 0.1, -10);
+    stabLeftMesh.rotation.y = -Math.PI / 8;
+    airplaneGroup.add(stabLeftMesh);
+
+    const stabRightGeom = new THREE.BoxGeometry(5, 0.08, 1.5);
+    stabRightGeom.translate(2.5, 0, 0);
+    const stabRightMesh = new THREE.Mesh(stabRightGeom, airplaneMaterial);
+    stabRightMesh.position.set(0.5, 0.1, -10);
+    stabRightMesh.rotation.y = Math.PI / 8;
+    airplaneGroup.add(stabRightMesh);
+
+    // Quad Turbofans (A380 Signature Engines)
+    const createEngine = (x, y, z) => {
+      const engineGeom = new THREE.CylinderGeometry(0.6, 0.6, 2.2, 8);
+      engineGeom.rotateX(Math.PI / 2);
+      const engineMesh = new THREE.Mesh(engineGeom, airplaneMaterial);
+      engineMesh.position.set(x, y, z);
+      airplaneGroup.add(engineMesh);
+    };
+
+    createEngine(-3.5, -0.4, 0.8);
+    createEngine(3.5, -0.4, 0.8);
+    createEngine(-7, -0.2, 1.7);
+    createEngine(7, -0.2, 1.7);
+
+    // Initial 3D Tilt perspective position
+    airplaneGroup.rotation.set(0.2, -0.6, 0.15);
+
+    // Expose to window context for scroll manipulation
+    window.a380Material = airplaneMaterial;
+
+    // --- Interactive Mouse Drag Rotations ---
+    let isDragging = false;
+    let previousPointerPos = { x: 0, y: 0 };
+
+    const onPointerDown = (e) => {
+      const tag = e.target.tagName;
+      if (tag !== 'A' && tag !== 'BUTTON' && tag !== 'INPUT' && !e.target.closest('.contact-links') && !e.target.closest('.boss-card')) {
+        isDragging = true;
+        const pageX = e.pageX || (e.touches && e.touches[0].pageX);
+        const pageY = e.pageY || (e.touches && e.touches[0].pageY);
+        previousPointerPos = { x: pageX, y: pageY };
+      }
+    };
+
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+      const pageX = e.pageX || (e.touches && e.touches[0].pageX);
+      const pageY = e.pageY || (e.touches && e.touches[0].pageY);
+
+      const deltaMove = {
+        x: pageX - previousPointerPos.x,
+        y: pageY - previousPointerPos.y
+      };
+
+      airplaneGroup.rotation.y += deltaMove.x * 0.005;
+      airplaneGroup.rotation.x += deltaMove.y * 0.005;
+
+      previousPointerPos = { x: pageX, y: pageY };
+    };
+
+    const onPointerUp = () => {
+      isDragging = false;
+    };
+
+    document.addEventListener("mousedown", onPointerDown, { passive: true });
+    document.addEventListener("mousemove", onPointerMove, { passive: true });
+    document.addEventListener("mouseup", onPointerUp, { passive: true });
+
+    document.addEventListener("touchstart", onPointerDown, { passive: true });
+    document.addEventListener("touchmove", onPointerMove, { passive: true });
+    document.addEventListener("touchend", onPointerUp, { passive: true });
+
+    // Handle Window Resizing
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Animation Rendering Loop
+    const renderLoop = () => {
+      requestAnimationFrame(renderLoop);
+
+      // Auto-rotation around the vertical axis when not dragged
+      if (!isDragging) {
+        airplaneGroup.rotation.y += 0.0015;
+        // Keep pitch tilt within comfortable cockpit sightlines
+        airplaneGroup.rotation.x = Math.max(-0.4, Math.min(0.4, airplaneGroup.rotation.x));
+      }
+
+      renderer.render(scene, camera);
+    };
+
+    renderLoop();
+  };
+
+  init3DAirplane();
 });
