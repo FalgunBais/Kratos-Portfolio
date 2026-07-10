@@ -1736,8 +1736,8 @@ body.konami-active {
   position: fixed;
   inset: 0;
   z-index: 0;
-  pointer-events: auto; /* Allow users to drag the empty background to rotate A380 */
-  opacity: 0.2; /* Beautiful wireframe visibility */
+  pointer-events: none; /* Keep fixed in background, never block page links/actions */
+  opacity: 0.25; /* Sleek visibility */
   transition: opacity 0.6s ease;
 }
 
@@ -1745,6 +1745,6 @@ body.konami-active {
   width: 100%;
   height: 100%;
   display: block;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
