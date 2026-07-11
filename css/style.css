@@ -37,18 +37,7 @@ body {
   position: relative;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: 
-    linear-gradient(rgba(43, 66, 102, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(43, 66, 102, 0.1) 1px, transparent 1px);
-  background-size: 40px 40px;
-  background-position: center;
-  z-index: 0;
-  pointer-events: none;
-}
+
 
 ::selection {
   background: var(--cyan);
