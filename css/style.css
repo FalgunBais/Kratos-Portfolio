@@ -65,46 +65,48 @@ body {
 
 
 
-.cloud-container {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.cloud {
+.clouds-bg-layer,
+.clouds-fg-layer {
   position: absolute;
-  font-size: 120px;
-  opacity: 0.15;
-  filter: blur(4px);
-  color: #ffffff;
-  user-select: none;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-.cloud.speed-1 {
-  animation: drift 55s linear infinite;
+.clouds-bg-layer {
+  z-index: 0; /* Behind plane centerpiece */
 }
 
-.cloud.speed-2 {
-  animation: drift 75s linear infinite;
-  font-size: 160px;
-  opacity: 0.10;
+.clouds-fg-layer {
+  z-index: 2; /* In front of plane centerpiece */
 }
 
-.cloud.speed-3 {
-  animation: drift 95s linear infinite;
-  font-size: 200px;
-  opacity: 0.06;
+.volumetric-cloud {
+  position: absolute;
+  width: 380px;
+  height: 140px;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity, left;
+  background: radial-gradient(circle at 50% 50%, 
+    rgba(255, 255, 255, 0.75) 0%, 
+    rgba(255, 255, 255, 0.35) 40%, 
+    rgba(255, 255, 255, 0) 70%
+  );
+  filter: blur(28px);
+  mix-blend-mode: screen; /* Smooth blending with blue sky gradient */
+  transition: opacity 0.5s ease;
 }
 
-@keyframes drift {
-  0% {
-    transform: translateX(-100vw);
-  }
-  100% {
-    transform: translateX(100vw);
-  }
+.cloud-fg {
+  width: 320px;
+  height: 110px;
+  background: radial-gradient(circle at 45% 45%, 
+    rgba(255, 255, 255, 0.85) 0%, 
+    rgba(255, 255, 255, 0.45) 35%, 
+    rgba(240, 248, 255, 0) 70%
+  );
+  filter: blur(20px);
 }
 
 .hud-bar {

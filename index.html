@@ -81,13 +81,7 @@
 
 
 
-  <!-- Cloud Parallax Container instead of Starfield -->
-  <div class="cloud-container" aria-hidden="true">
-    <div class="cloud speed-1" style="top: 15%; left: -10%;">☁️</div>
-    <div class="cloud speed-2" style="top: 30%; left: 75%;">☁️</div>
-    <div class="cloud speed-3" style="top: 55%; left: 5%;">☁️</div>
-    <div class="cloud speed-1" style="top: 75%; left: 60%;">☁️</div>
-  </div>
+
 
   <header class="hud-header hud-bar">
     <!-- Left Side: Brand flight controls -->
@@ -161,9 +155,15 @@
     <!-- HERO / START SCREEN -->
     <section id="home" class="section hero-section is-visible">
       <div class="gta-vi-logo" aria-hidden="true" style="font-size: 220px; opacity: 0.04;">✈</div>
+      <!-- Volumetric Background Cloud Layer (behind plane) -->
+      <div class="clouds-bg-layer" aria-hidden="true"></div>
+
       <div class="hero-a380-container" aria-hidden="true">
         <img id="heroA380" src="a380_centerpiece.png" alt="Airbus A380 centerpiece" style="display: none;">
       </div>
+
+      <!-- Volumetric Foreground Cloud Layer (in front of plane) -->
+      <div class="clouds-fg-layer" aria-hidden="true"></div>
       <div class="hero-content">
         <p class="hero-insert-coin">RUNWAY 01: PRE-FLIGHT INITIALIZED</p>
         <h1 class="aviator-title">
