@@ -1129,5 +1129,46 @@ document.addEventListener("DOMContentLoaded", () => {
     renderLoop();
   };
 
-  init3DAirplane();
+  // init3DAirplane(); // Disabled background 3D silhouette in favor of high-fidelity A380 hero centerpiece
+
+  // --- Airbus A380 Hero Centerpiece Background Isolation ---
+  const isolateHeroA380 = () => {
+    const img = document.getElementById("heroA380");
+    if (!img) return;
+
+    const processImage = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+
+      ctx.drawImage(img, 0, 0);
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const data = imgData.data;
+
+      // Filter out solid black pixels (R, G, B close to 0) to make them transparent
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+
+        // Isolate black background
+        if (r < 18 && g < 18 && b < 18) {
+          data[i + 3] = 0; // Transparent
+        }
+      }
+
+      ctx.putImageData(imgData, 0, 0);
+      img.src = canvas.toDataURL("image/png");
+      img.style.display = "block"; // Display centerpiece after transparent-keying is done
+    };
+
+    if (img.complete) {
+      processImage();
+    } else {
+      img.onload = processImage;
+    }
+  };
+
+  isolateHeroA380();
 });

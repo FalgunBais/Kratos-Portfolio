@@ -329,12 +329,58 @@ body::before {
   align-items: center;
   justify-content: center;
   text-align: center;
+  position: relative;
+}
+
+/* Premium Airbus A380 Centerpiece Container */
+.hero-a380-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 680px;
+  z-index: 1;
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#heroA380 {
+  width: 100%;
+  height: auto;
+  opacity: 0.95;
+  filter: 
+    drop-shadow(0 25px 30px rgba(10, 14, 23, 0.45)) 
+    drop-shadow(0 0 20px rgba(0, 210, 255, 0.3)) 
+    drop-shadow(0 0 20px rgba(217, 70, 239, 0.2));
+  animation: heroA380Flight 9s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+@keyframes heroA380Flight {
+  0%, 100% {
+    transform: translateY(0px) rotate(22deg) rotateY(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(23deg) rotateY(1deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-a380-container {
+    max-width: 320px;
+    top: 48%;
+  }
 }
 
 .hero-content {
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-insert-coin {
