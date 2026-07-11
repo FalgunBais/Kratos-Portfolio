@@ -247,16 +247,7 @@ body::before {
 }
 
 .hud-nav-link::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0%;
-  height: 2px;
-  background-color: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
-  transform: translateX(-50%);
-  transition: width 0.25s ease;
+  display: none !important;
 }
 
 .hud-nav-link:hover {
@@ -265,18 +256,25 @@ body::before {
   text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
 }
 
-.hud-nav-link:hover::after {
-  width: 100%;
-}
-
 .hud-nav-link.active {
   color: var(--cyan) !important;
   text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
 }
 
-.hud-nav-link.active::after {
-  width: 100%;
+/* Sliding active underline line */
+.hud-nav-slider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
   background-color: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan), 0 0 4px rgba(0, 210, 255, 0.5);
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1), width 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+  transform-origin: left center;
+  opacity: 0;
 }
 
 .hud-link-indicator {

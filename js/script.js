@@ -1271,6 +1271,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Desktop Navigation Control Panel & Scrollspy ---
   const initDesktopNavigation = () => {
+    const slider = document.querySelector(".hud-nav-slider");
+    const navList = document.querySelector(".hud-nav-list");
+
+    const updateNavSlider = () => {
+      const activeLink = document.querySelector(".hud-nav-link.active");
+      if (!activeLink || !slider || !navList) return;
+
+      const activeRect = activeLink.getBoundingClientRect();
+      const parentRect = navList.getBoundingClientRect();
+
+      // Position relative to parent container
+      const relativeLeft = activeRect.left - parentRect.left;
+      
+      slider.style.width = `${activeRect.width}px`;
+      slider.style.transform = `translateX(${relativeLeft}px)`;
+      slider.style.opacity = "1";
+    };
+
     // Custom GPU-friendly 800ms Ease-In-Out Smooth Scroll
     const smoothScrollTo = (targetSelector, duration = 800) => {
       const target = document.querySelector(targetSelector);
@@ -1308,6 +1326,14 @@ document.addEventListener("DOMContentLoaded", () => {
       link.addEventListener("click", (e) => {
         e.preventDefault();
         const targetId = link.getAttribute("href");
+        
+        // If clicked from navbar, update immediately for feedback
+        if (link.classList.contains("hud-nav-link")) {
+          document.querySelectorAll(".hud-nav-link").forEach(l => l.classList.remove("active"));
+          link.classList.add("active");
+          updateNavSlider();
+        }
+
         smoothScrollTo(targetId, 800);
       });
     });
@@ -1329,12 +1355,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       // Highlight active link in header navbar
+      let activeChanged = false;
       desktopLinks.forEach(link => {
         const href = link.getAttribute("href");
+        const hasActive = link.classList.contains("active");
         if (href === `#${currentSectionId}`) {
-          link.classList.add("active");
+          if (!hasActive) {
+            link.classList.add("active");
+            activeChanged = true;
+          }
         } else {
-          link.classList.remove("active");
+          if (hasActive) {
+            link.classList.remove("active");
+            activeChanged = true;
+          }
         }
       });
 
@@ -1347,10 +1381,52 @@ document.addEventListener("DOMContentLoaded", () => {
           dot.classList.remove("active");
         }
       });
+
+      if (activeChanged) {
+        updateNavSlider();
+      }
     };
 
+    // Correctly highlight section on refresh / hash routing / forward-back navigation
+    const checkInitialHash = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const targetLink = document.querySelector(`.hud-nav-link[href="${hash}"]`);
+        if (targetLink) {
+          document.querySelectorAll(".hud-nav-link").forEach(l => l.classList.remove("active"));
+          targetLink.classList.add("active");
+          
+          const targetSection = document.querySelector(hash);
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: "auto" });
+          }
+          
+          setTimeout(updateNavSlider, 100);
+        }
+      } else {
+        updateNavSlider();
+      }
+    };
+
+    window.addEventListener("hashchange", () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const targetLink = document.querySelector(`.hud-nav-link[href="${hash}"]`);
+        if (targetLink) {
+          document.querySelectorAll(".hud-nav-link").forEach(l => l.classList.remove("active"));
+          targetLink.classList.add("active");
+          updateNavSlider();
+        }
+      }
+    });
+
     window.addEventListener("scroll", onScrollspy, { passive: true });
-    onScrollspy(); // Run initially
+    window.addEventListener("resize", updateNavSlider);
+    window.addEventListener("load", checkInitialHash);
+    
+    // Run initially
+    onScrollspy();
+    checkInitialHash();
   };
 
   initDesktopNavigation();
