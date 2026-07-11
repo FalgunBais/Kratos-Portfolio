@@ -1142,22 +1142,78 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+        canvas.width = width;
+        canvas.height = height;
 
         ctx.drawImage(img, 0, 0);
-        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const imgData = ctx.getImageData(0, 0, width, height);
         const data = imgData.data;
 
-        // Filter out solid black pixels (R, G, B close to 0) to make them transparent
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
+        // BFS visited array to track outer background pixels
+        const visited = new Uint8Array(width * height);
+        const queue = [];
+        const threshold = 40; // Safely catches compression noise/ambient black border
 
-          // Isolate black background
-          if (r < 18 && g < 18 && b < 18) {
-            data[i + 3] = 0; // Transparent
+        const isNearBlack = (x, y) => {
+          const idx = (y * width + x) * 4;
+          return data[idx] < threshold && data[idx + 1] < threshold && data[idx + 2] < threshold;
+        };
+
+        // Push all border pixels to the queue if they are near black
+        for (let x = 0; x < width; x++) {
+          if (isNearBlack(x, 0)) {
+            const idx = 0 * width + x;
+            visited[idx] = 1;
+            queue.push(x, 0);
+          }
+          if (isNearBlack(x, height - 1)) {
+            const idx = (height - 1) * width + x;
+            visited[idx] = 1;
+            queue.push(x, height - 1);
+          }
+        }
+        for (let y = 0; y < height; y++) {
+          if (isNearBlack(0, y)) {
+            const idx = y * width + 0;
+            visited[idx] = 1;
+            queue.push(0, y);
+          }
+          if (isNearBlack(width - 1, y)) {
+            const idx = y * width + (width - 1);
+            visited[idx] = 1;
+            queue.push(width - 1, y);
+          }
+        }
+
+        // BFS traversal to map out contiguous background pixels
+        let head = 0;
+        const dx = [0, 0, 1, -1];
+        const dy = [1, -1, 0, 0];
+
+        while (head < queue.length) {
+          const cx = queue[head++];
+          const cy = queue[head++];
+
+          for (let i = 0; i < 4; i++) {
+            const nx = cx + dx[i];
+            const ny = cy + dy[i];
+
+            if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+              const nidx = ny * width + nx;
+              if (visited[nidx] === 0 && isNearBlack(nx, ny)) {
+                visited[nidx] = 1;
+                queue.push(nx, ny);
+              }
+            }
+          }
+        }
+
+        // Apply transparency mask solely to outer background pixels (prevents engine/window holes)
+        for (let idx = 0; idx < width * height; idx++) {
+          if (visited[idx] === 1) {
+            data[idx * 4 + 3] = 0; // Transparent
           }
         }
 
