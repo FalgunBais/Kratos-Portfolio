@@ -89,40 +89,61 @@
     <div class="cloud speed-1" style="top: 75%; left: 60%;">☁️</div>
   </div>
 
-  <!-- HUD Bar -->
-  <header class="hud-bar">
-    <div class="hud-left">
-      <span class="hud-name">
-        CAPT. <span class="captain-name-wrapper"><svg class="captain-hat-svg" viewBox="0 0 100 50" aria-hidden="true"><path d="M10,30 Q50,0 90,30 Z" fill="#0c2461" stroke="#00f0ff" stroke-width="1.5"/><rect x="15" y="27" width="70" height="6" fill="#ffd700" rx="2"/><path d="M40,24 L45,29 L50,22 L55,29 L60,24 L50,30 Z" fill="#ffd700"/><path d="M5,33 Q50,45 95,33 L85,38 Q50,48 15,38 Z" fill="#000000" stroke="#00f0ff" stroke-width="1"/></svg>FALGUN</span>
-      </span>
-    </div>
-    <div class="hud-center">
-      <span class="hud-telemetry-item hdg">HDG 045°</span>
-      <span class="hud-telemetry-divider">|</span>
-      <span class="hud-telemetry-item ap">AP ACTIVE</span>
-      <span class="hud-telemetry-divider">|</span>
-      <span class="hud-telemetry-item xpndr">XPNDR 7000</span>
-    </div>
-    <div class="hud-status">
-      <div class="hud-hp">
-        <span class="hud-hp-label">ALT</span>
-        <div class="hud-hp-track">
-          <div class="hud-hp-fill" id="hpFill"></div>
+  <header class="hud-header hud-bar">
+    <!-- Left Side: Brand flight controls -->
+    <a href="#home" class="hud-brand" aria-label="Flight Deck Homepage">
+      <span class="hud-logo-icon">✈</span>
+      <span class="hud-brand-text">CAPT. FALGUN</span>
+    </a>
+
+    <!-- Center Navigation items -->
+    <nav class="hud-desktop-nav" aria-label="Desktop flight control deck">
+      <ul class="hud-nav-list">
+        <li><a href="#home" class="hud-nav-link active">Home<span class="hud-link-indicator"></span></a></li>
+        <li><a href="#about" class="hud-nav-link">About<span class="hud-link-indicator"></span></a></li>
+        <li><a href="#projects" class="hud-nav-link">Projects<span class="hud-link-indicator"></span></a></li>
+        <li><a href="#experience" class="hud-nav-link">Experience<span class="hud-link-indicator"></span></a></li>
+        <li><a href="#skills" class="hud-nav-link">Skills<span class="hud-link-indicator"></span></a></li>
+        <li><a href="#certifications" class="hud-nav-link">Certifications<span class="hud-link-indicator"></span></a></li>
+        <li><a href="#contact" class="hud-nav-link">Contact<span class="hud-link-indicator"></span></a></li>
+      </ul>
+    </nav>
+
+    <!-- Right Side status indicators -->
+    <div class="hud-right-panel" aria-label="Cockpit telemetry data">
+      <div class="hud-telemetry-grid">
+        <div class="hud-telemetry-card">
+          <span class="hud-card-lbl">ALT</span>
+          <span class="hud-card-val" id="altTelemetry">0 FT</span>
+          <div class="hud-mini-track"><div class="hud-mini-fill" id="hpFill"></div></div>
         </div>
-        <span class="hud-telemetry" id="altTelemetry">0 FT</span>
-      </div>
-      <div class="hud-armor">
-        <span class="hud-armor-label">SPD</span>
-        <div class="hud-armor-track">
-          <div class="hud-armor-fill" id="armorFill"></div>
+        <div class="hud-telemetry-card">
+          <span class="hud-card-lbl">SPD</span>
+          <span class="hud-card-val" id="spdTelemetry">140 KTS</span>
+          <div class="hud-mini-track"><div class="hud-mini-fill" id="armorFill"></div></div>
         </div>
-        <span class="hud-telemetry" id="spdTelemetry">140 KTS</span>
+        <div class="hud-telemetry-card">
+          <span class="hud-card-lbl">HDG</span>
+          <span class="hud-card-val">045°</span>
+        </div>
+        <div class="hud-telemetry-card">
+          <span class="hud-card-lbl">AP</span>
+          <span class="hud-card-val status-green">ACTIVE</span>
+        </div>
       </div>
-    </div>
-    <div class="hud-wanted" id="hudWanted" aria-label="Flight fixes unlocked: 0">
-      <span class="star">✈</span><span class="star">✈</span><span class="star">✈</span><span class="star">✈</span><span class="star">✈</span>
     </div>
   </header>
+
+  <!-- Vertical Flight Stage Progress Indicator (Desktop only) -->
+  <div class="flight-progress-indicator" aria-label="Flight Stage Progress" role="navigation">
+    <a href="#home" class="progress-dot active" data-tooltip="Home"><span class="dot-inner"></span></a>
+    <a href="#about" class="progress-dot" data-tooltip="About"><span class="dot-inner"></span></a>
+    <a href="#projects" class="progress-dot" data-tooltip="Projects"><span class="dot-inner"></span></a>
+    <a href="#experience" class="progress-dot" data-tooltip="Experience"><span class="dot-inner"></span></a>
+    <a href="#skills" class="progress-dot" data-tooltip="Skills"><span class="dot-inner"></span></a>
+    <a href="#certifications" class="progress-dot" data-tooltip="Certifications"><span class="dot-inner"></span></a>
+    <a href="#contact" class="progress-dot" data-tooltip="Contact"><span class="dot-inner"></span></a>
+  </div>
 
   <!-- Level Path SVG -->
   <svg class="level-path" id="levelPath" viewBox="0 0 880 3000" aria-hidden="true" preserveAspectRatio="none">

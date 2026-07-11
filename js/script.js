@@ -1268,4 +1268,90 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   initMobileNavigation();
+
+  // --- Desktop Navigation Control Panel & Scrollspy ---
+  const initDesktopNavigation = () => {
+    // Custom GPU-friendly 800ms Ease-In-Out Smooth Scroll
+    const smoothScrollTo = (targetSelector, duration = 800) => {
+      const target = document.querySelector(targetSelector);
+      if (!target) return;
+      
+      const targetPosition = target.getBoundingClientRect().top + window.scrollY;
+      const startPosition = window.scrollY;
+      const distance = targetPosition - startPosition;
+      let startTime = null;
+
+      const easeInOutQuad = (t, b, c, d) => {
+        t /= d / 2;
+        if (t < 1) return (c / 2) * t * t + b;
+        t--;
+        return (-c / 2) * (t * (t - 2) - 1) + b;
+      };
+
+      const animation = (currentTime) => {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const run = easeInOutQuad(timeElapsed, startPosition, distance, duration);
+        window.scrollTo(0, run);
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        } else {
+          window.scrollTo(0, targetPosition); // Guarantee final position precision
+        }
+      };
+
+      requestAnimationFrame(animation);
+    };
+
+    const navLinks = document.querySelectorAll(".hud-nav-link, .progress-dot, .hud-brand");
+    navLinks.forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute("href");
+        smoothScrollTo(targetId, 800);
+      });
+    });
+
+    // Scrollspy section active highlight
+    const activeSections = ["home", "about", "projects", "experience", "skills", "certifications", "contact"];
+    const sectionElements = activeSections.map(id => document.getElementById(id)).filter(el => el !== null);
+    const desktopLinks = document.querySelectorAll(".hud-nav-link");
+    const progressDots = document.querySelectorAll(".progress-dot");
+
+    const onScrollspy = () => {
+      let currentSectionId = "home";
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      sectionElements.forEach(el => {
+        if (scrollPos >= el.offsetTop) {
+          currentSectionId = el.id;
+        }
+      });
+
+      // Highlight active link in header navbar
+      desktopLinks.forEach(link => {
+        const href = link.getAttribute("href");
+        if (href === `#${currentSectionId}`) {
+          link.classList.add("active");
+        } else {
+          link.classList.remove("active");
+        }
+      });
+
+      // Highlight active dot in vertical stage indicator
+      progressDots.forEach(dot => {
+        const href = dot.getAttribute("href");
+        if (href === `#${currentSectionId}`) {
+          dot.classList.add("active");
+        } else {
+          dot.classList.remove("active");
+        }
+      });
+    };
+
+    window.addEventListener("scroll", onScrollspy, { passive: true });
+    onScrollspy(); // Run initially
+  };
+
+  initDesktopNavigation();
 });

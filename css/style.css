@@ -124,18 +124,245 @@ body::before {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(10, 14, 23, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 2px solid var(--grid-line);
+  background: rgba(10, 14, 23, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 210, 255, 0.06);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 54px;
-  padding: 0 24px;
+  height: 75px;
+  padding: 0 32px;
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 1px;
+  animation: hudNavbarEntrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes hudNavbarEntrance {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Left Brand Link */
+.hud-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: 15px;
+  transition: text-shadow 0.3s ease;
+}
+
+.hud-brand:hover {
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+}
+
+.hud-logo-icon {
+  font-size: 18px;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+  animation: hudLogoPulse 2s infinite ease-in-out;
+}
+
+@keyframes hudLogoPulse {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+    text-shadow: 0 0 12px var(--cyan);
+  }
+}
+
+/* Center Navigation Items */
+.hud-desktop-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (max-width: 1024px) {
+  .hud-desktop-nav {
+    display: none;
+  }
+}
+
+.hud-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.hud-nav-list li {
+  animation: hudLinkFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.hud-nav-list li:nth-child(1) { animation-delay: 0.1s; }
+.hud-nav-list li:nth-child(2) { animation-delay: 0.15s; }
+.hud-nav-list li:nth-child(3) { animation-delay: 0.2s; }
+.hud-nav-list li:nth-child(4) { animation-delay: 0.25s; }
+.hud-nav-list li:nth-child(5) { animation-delay: 0.3s; }
+.hud-nav-list li:nth-child(6) { animation-delay: 0.35s; }
+.hud-nav-list li:nth-child(7) { animation-delay: 0.40s; }
+
+@keyframes hudLinkFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hud-nav-link {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 13px;
+  position: relative;
+  padding: 8px 4px;
+  display: inline-block;
+  transition: color 0.25s ease, transform 0.25s ease, text-shadow 0.25s ease;
+}
+
+.hud-nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0%;
+  height: 2px;
+  background-color: var(--cyan);
+  box-shadow: 0 0 8px var(--cyan);
+  transform: translateX(-50%);
+  transition: width 0.25s ease;
+}
+
+.hud-nav-link:hover {
+  transform: translateY(-2px);
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.5);
+}
+
+.hud-nav-link:hover::after {
+  width: 100%;
+}
+
+.hud-nav-link.active {
+  color: var(--cyan) !important;
+  text-shadow: 0 0 10px rgba(0, 210, 255, 0.6);
+}
+
+.hud-nav-link.active::after {
+  width: 100%;
+  background-color: var(--cyan);
+}
+
+.hud-link-indicator {
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  width: 4px;
+  height: 4px;
+  background-color: var(--cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--cyan);
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+.hud-nav-link.active .hud-link-indicator {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Right Side Cockpit Status Panel */
+.hud-right-panel {
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .hud-right-panel {
+    display: none;
+  }
+}
+
+.hud-telemetry-grid {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.hud-telemetry-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 80px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+}
+
+.hud-card-lbl {
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+.hud-card-val {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+}
+
+.status-green {
+  color: var(--green);
+  text-shadow: 0 0 6px var(--green);
+}
+
+/* Mini HUD progress track gauges inside card */
+.hud-mini-track {
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: 4px;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.hud-mini-fill {
+  height: 100%;
+  background: var(--cyan);
+  width: 0%;
+  transition: width 0.3s ease;
 }
 
 .hud-center {
@@ -2201,6 +2428,88 @@ body.konami-active {
   .mobile-hud-btn {
     display: flex;
   }
+}
+
+/* Vertical Flight Stage Progress Indicator (Desktop only) */
+.flight-progress-indicator {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 1000;
+}
+
+@media (max-width: 1024px) {
+  .flight-progress-indicator {
+    display: none;
+  }
+}
+
+.progress-dot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dot-inner {
+  width: 6px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  transition: width 0.25s ease, height 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.progress-dot.active .dot-inner {
+  width: 10px;
+  height: 10px;
+  background-color: var(--cyan);
+  box-shadow: 0 0 10px var(--cyan), 0 0 4px rgba(0, 210, 255, 0.5);
+}
+
+.progress-dot:hover .dot-inner {
+  background-color: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+/* Side Tooltip on hover */
+.progress-dot::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: rgba(10, 14, 23, 0.92);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  color: #ffffff;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.progress-dot:hover::before {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.progress-dot:focus-visible {
+  outline: 2px solid var(--cyan);
+  border-radius: 50%;
 }
 
 
