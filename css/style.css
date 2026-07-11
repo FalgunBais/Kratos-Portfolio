@@ -657,16 +657,13 @@ body::before {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 56px;
-  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 50%, #f8fafc 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff;
   position: relative;
   line-height: 1.2;
   letter-spacing: 5px;
   text-transform: uppercase;
   z-index: 1;
-  filter: drop-shadow(0 4px 6px rgba(10, 14, 23, 0.6)) drop-shadow(0 0 12px rgba(0, 210, 255, 0.55));
+  text-shadow: 0 0 15px rgba(0, 210, 255, 0.55), 0 2px 4px rgba(10, 14, 23, 0.6);
 }
 
 .aviator-title::before {
