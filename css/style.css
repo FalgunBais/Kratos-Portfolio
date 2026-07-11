@@ -419,15 +419,31 @@ body::before {
   filter: drop-shadow(0 0 20px rgba(255, 0, 127, 0.4));
 }
 
-.glitch-title {
+.aviator-title {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 54px;
-  color: var(--text-light);
+  color: #ffffff;
   position: relative;
   line-height: 1.2;
-  animation: glitch 3s infinite;
+  letter-spacing: 4px;
+  text-transform: uppercase;
   z-index: 1;
+  text-shadow: 0 0 15px rgba(0, 210, 255, 0.4), 0 2px 4px rgba(10, 14, 23, 0.5);
+}
+
+.aviator-title::before {
+  content: "[ ";
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+  font-weight: 300;
+}
+
+.aviator-title::after {
+  content: " ]";
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan);
+  font-weight: 300;
 }
 
 .vice-city-script {
@@ -443,58 +459,7 @@ body::before {
   text-transform: uppercase;
 }
 
-@keyframes glitch {
-  0%, 100% {
-    text-shadow:
-      -3px 0 var(--cyan),
-      3px 0 var(--magenta);
-  }
-  10% {
-    text-shadow:
-      3px 2px var(--cyan),
-      -3px -2px var(--magenta);
-  }
-  20% {
-    text-shadow:
-      -2px -1px var(--cyan),
-      2px 1px var(--magenta);
-  }
-  30% {
-    text-shadow:
-      3px 0 var(--cyan),
-      -3px 0 var(--magenta);
-  }
-  40% {
-    text-shadow:
-      -3px 3px var(--cyan),
-      3px -3px var(--magenta);
-  }
-  50% {
-    text-shadow:
-      2px -2px var(--cyan),
-      -2px 2px var(--magenta);
-  }
-  60% {
-    text-shadow:
-      -1px 2px var(--cyan),
-      1px -2px var(--magenta);
-  }
-  70% {
-    text-shadow:
-      3px 1px var(--cyan),
-      -3px -1px var(--magenta);
-  }
-  80% {
-    text-shadow:
-      -2px -3px var(--cyan),
-      2px 3px var(--magenta);
-  }
-  90% {
-    text-shadow:
-      1px 1px var(--cyan),
-      -1px -1px var(--magenta);
-  }
-}
+
 
 .hero-subtitle {
   font-family: 'Montserrat', sans-serif;
@@ -1524,7 +1489,7 @@ body.konami-active {
     font-size: 200px;
   }
 
-  .glitch-title {
+  .aviator-title {
     font-size: 36px;
   }
 
@@ -1606,7 +1571,7 @@ body.konami-active {
     font-size: 140px;
   }
 
-  .glitch-title {
+  .aviator-title {
     font-size: 26px;
   }
 
@@ -1817,8 +1782,8 @@ body.konami-active {
   height: 19px;
 }
 
-/* Specific scaling for Hero glitch title cap */
-.glitch-title .captain-hat-svg {
+/* Specific scaling for Hero aviator title cap */
+.aviator-title .captain-hat-svg {
   top: -30px;
   left: -12px;
   width: 60px;
