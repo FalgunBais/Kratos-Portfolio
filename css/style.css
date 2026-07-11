@@ -582,10 +582,10 @@ body {
 
 @keyframes heroA380Flight {
   0%, 100% {
-    transform: translateY(0px) rotate(22deg) rotateY(0deg);
+    transform: translateY(0px) rotate(0deg) scale(1);
   }
   50% {
-    transform: translateY(-8px) rotate(23deg) rotateY(1deg);
+    transform: translateY(-12px) rotate(0.8deg) scale(1.015);
   }
 }
 
