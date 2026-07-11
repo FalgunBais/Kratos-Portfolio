@@ -577,18 +577,24 @@ body {
   opacity: 0.95;
   filter: 
     drop-shadow(0 25px 30px rgba(10, 14, 23, 0.45)) 
-    drop-shadow(0 0 20px rgba(0, 210, 255, 0.3)) 
-    drop-shadow(0 0 20px rgba(217, 70, 239, 0.2));
-  animation: heroA380Flight 9s ease-in-out infinite;
-  transform-origin: center center;
+    drop-shadow(0 0 20px rgba(0, 210, 255, 0.25));
+  animation: a380Shimmer 8s ease-in-out infinite;
+  transform: none; /* Visually stable centerline anchor */
+  will-change: filter;
 }
 
-@keyframes heroA380Flight {
+@keyframes a380Shimmer {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg) scale(1);
+    filter: 
+      drop-shadow(0 25px 30px rgba(10, 14, 23, 0.45)) 
+      drop-shadow(0 0 20px rgba(0, 210, 255, 0.25))
+      brightness(1);
   }
   50% {
-    transform: translateY(-12px) rotate(0.8deg) scale(1.015);
+    filter: 
+      drop-shadow(0 25px 30px rgba(10, 14, 23, 0.45)) 
+      drop-shadow(0 0 25px rgba(0, 210, 255, 0.35))
+      brightness(1.04); /* Subtle engine light shimmer/reflection pulse */
   }
 }
 
@@ -605,6 +611,17 @@ body {
   align-items: center;
   position: relative;
   z-index: 2;
+  will-change: opacity, transform; /* Hardware accelerated scroll target */
+}
+
+.hero-interactive-deck {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1), text-shadow 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
+  transform-style: preserve-3d; /* Real 3D depth tilt */
 }
 
 .hero-insert-coin {

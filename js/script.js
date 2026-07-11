@@ -213,6 +213,20 @@ document.addEventListener("DOMContentLoaded", () => {
         armorFill.style.width = `${(speedVal / 540) * 100}%`;
       }
 
+      // Hero Content Scroll Parallax & Fade (Grounded Centerpiece Option)
+      const heroContent = document.querySelector(".hero-content");
+      if (heroContent) {
+        const heroHeight = document.querySelector(".hero-section")?.offsetHeight || 800;
+        const scrollFactor = Math.min(scrollTop / heroHeight, 1);
+        
+        const opacity = 1 - scrollFactor * 1.5;
+        const translateOffset = scrollFactor * 120;
+        const scale = 1 - scrollFactor * 0.12;
+        
+        heroContent.style.opacity = Math.max(opacity, 0);
+        heroContent.style.transform = `translate3d(0, ${translateOffset}px, 0) scale(${scale})`;
+      }
+
       // Calculate navigation fixes
       const wantedContainer = document.getElementById("hudWanted");
       if (wantedContainer) {
@@ -1327,6 +1341,58 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   initVolumetricClouds();
+
+  // --- Hero Content Interactive 3D Cursor Tilt & Parallax ---
+  const initHeroTextTilt = () => {
+    const heroSection = document.querySelector(".hero-section");
+    const heroInteractiveDeck = document.querySelector(".hero-interactive-deck");
+    if (!heroSection || !heroInteractiveDeck) return;
+
+    // Apply 3D perspective context to parent hero section
+    heroSection.style.perspective = "1200px";
+
+    const onMouseMove = (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Normalized coordinates (-0.5 to 0.5)
+      const xPercent = (x / rect.width) - 0.5;
+      const yPercent = (y / rect.height) - 0.5;
+
+      // Tilt slightly in 3D (max 9 degrees)
+      const tiltX = -yPercent * 9; // rotates around X axis
+      const tiltY = xPercent * 9;  // rotates around Y axis
+
+      // Parallax translation: gently float 8px to 14px
+      const transX = xPercent * 14;
+      const transY = yPercent * 14;
+
+      // Combine into GPU-accelerated translate3d and rotates
+      requestAnimationFrame(() => {
+        heroInteractiveDeck.style.transform = `translate3d(${transX}px, ${transY}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        
+        // Dynamic cyan lighting glow effect matching cursor movement
+        heroInteractiveDeck.style.textShadow = `
+          ${-transX * 0.4}px ${-transY * 0.4}px 15px rgba(0, 210, 255, 0.45),
+          0 2px 8px rgba(0, 0, 0, 0.35)
+        `;
+      });
+    };
+
+    const onMouseLeave = () => {
+      // Smooth reset to stable center position
+      requestAnimationFrame(() => {
+        heroInteractiveDeck.style.transform = `translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg)`;
+        heroInteractiveDeck.style.textShadow = `0 2px 8px rgba(0, 0, 0, 0.35)`;
+      });
+    };
+
+    heroSection.addEventListener("mousemove", onMouseMove);
+    heroSection.addEventListener("mouseleave", onMouseLeave);
+  };
+
+  initHeroTextTilt();
 
   // --- Desktop Navigation Control Panel & Scrollspy ---
   const initDesktopNavigation = () => {
