@@ -1,16 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@400;500;700&family=Share+Tech+Mono&display=swap');
 
 :root {
-  --bg-deep: #080415;
-  --bg-panel: #12072b;
-  --bg-panel-2: #1b0a3d;
-  --grid-line: #34145f;
-  --cyan: #00f0ff;
-  --magenta: #ff007f;
-  --gold: #ff9f00;
-  --green: #39ff14;
-  --text-light: #f3eeff;
-  --text-dim: #9f8bbd;
+  --bg-deep: #0a0e17;      /* Deep night flight sky / cockpit shadow */
+  --bg-panel: #152238;     /* Cockpit instrument panel gray-blue */
+  --bg-panel-2: #1d2e4d;   /* Sub-panel/console button backing */
+  --grid-line: #2b4266;    /* Avionics radar sweep/grid lines */
+  --cyan: #00d2ff;         /* Primary flight display / telemetry cyan */
+  --magenta: #d946ef;      /* Navigation flight path magenta */
+  --gold: #f59e0b;         /* Caution/alert amber warning */
+  --green: #10b981;        /* Cockpit PFD/HUD green standard */
+  --text-light: #f8fafc;   /* Crisp white instrument readings */
+  --text-dim: #94a3b8;     /* Soft slate grey labels */
 }
 
 *,
@@ -26,13 +26,27 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, #ffd194 0%, #70a1ff 15%, #1e90ff 40%, #0c2461 65%, #0a041c 85%, #02000a 100%);
+  background: linear-gradient(180deg, #e0f2fe 0%, #38bdf8 15%, #0284c7 40%, #1e3a8a 65%, #0f172a 85%, #090d16 100%);
   color: var(--text-light);
   font-family: 'Montserrat', sans-serif;
   font-size: 17px;
   line-height: 1.65;
   overflow-x: hidden;
   min-height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(43, 66, 102, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(43, 66, 102, 0.1) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center;
+  z-index: 0;
+  pointer-events: none;
 }
 
 ::selection {
@@ -123,7 +137,7 @@ body {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: rgba(18, 7, 43, 0.9);
+  background: rgba(10, 14, 23, 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 2px solid var(--grid-line);
   display: flex;
@@ -135,6 +149,39 @@ body {
   font-weight: 700;
   font-size: 14px;
   letter-spacing: 1px;
+}
+
+.hud-center {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hud-telemetry-item {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hud-telemetry-item.hdg {
+  color: var(--cyan);
+  text-shadow: 0 0 5px rgba(0, 210, 255, 0.5);
+}
+
+.hud-telemetry-item.ap {
+  color: var(--green);
+  text-shadow: 0 0 5px rgba(16, 185, 129, 0.5);
+}
+
+.hud-telemetry-item.xpndr {
+  color: var(--gold);
+  text-shadow: 0 0 5px rgba(245, 158, 11, 0.5);
+}
+
+.hud-telemetry-divider {
+  color: rgba(255, 255, 255, 0.15);
+  font-weight: normal;
 }
 
 .hud-left {
@@ -259,14 +306,14 @@ body {
 
 .player-sprite {
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   z-index: 10;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,5 L58,40 L95,75 L58,70 L50,95 L42,70 L5,75 L42,40 Z' fill='%2300f0ff' stroke='%23ff007f' stroke-width='2'/%3E%3Cpath d='M50,30 L53,50 L47,50 Z' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50,5 L58,40 L95,75 L58,70 L50,95 L42,70 L5,75 L42,40 Z' fill='%23ffffff' stroke='%231e40af' stroke-width='3.5' stroke-linejoin='round'/%3E%3Cpath d='M50,30 L54,55 L46,55 Z' fill='%231e40af'/%3E%3C/svg%3E");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.8));
+  filter: drop-shadow(0 0 10px rgba(37, 99, 235, 0.8));
   transition: transform 0.15s ease-out;
 }
 
@@ -1761,5 +1808,63 @@ body.konami-active {
   height: 100%;
   display: block;
   pointer-events: none;
+}
+
+/* Avionics Cockpit Card Corner Targeting Brackets */
+.bio-panel, .edu-card, .inv-slot, .trophy-card, .boss-card, .quest-item {
+  position: relative;
+}
+
+.bio-panel::before, .bio-panel::after,
+.edu-card::before, .edu-card::after,
+.inv-slot::before, .inv-slot::after,
+.trophy-card::before, .trophy-card::after,
+.boss-card::before, .boss-card::after,
+.quest-item::before, .quest-item::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--grid-line);
+  pointer-events: none;
+  opacity: 0.5;
+  transition: opacity 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Top-left corner bracket */
+.bio-panel::before, .edu-card::before, .inv-slot::before, .trophy-card::before, .boss-card::before, .quest-item::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* Bottom-right corner bracket */
+.bio-panel::after, .edu-card::after, .inv-slot::after, .trophy-card::after, .boss-card::after, .quest-item::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
+
+/* Hover effects for cockpit target brackets */
+.edu-card:hover::before, .edu-card:hover::after,
+.inv-slot:hover::before, .inv-slot:hover::after,
+.trophy-card:hover::before, .trophy-card:hover::after,
+.boss-card:hover::before, .boss-card:hover::after,
+.quest-item:hover::before, .quest-item:hover::after {
+  border-color: var(--cyan);
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Slow rotation animation for background flight path indicator */
+@keyframes bgFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(10deg); }
+}
+
+.gta-vi-logo {
+  animation: bgFloat 18s ease-in-out infinite;
 }
 

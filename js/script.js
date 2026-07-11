@@ -573,12 +573,12 @@ document.addEventListener("DOMContentLoaded", () => {
     scene.add(dirLight);
 
     // Rim Fill Light Left (Cyan)
-    const rimLightLeft = new THREE.PointLight(0x00f0ff, 0.4, 60);
+    const rimLightLeft = new THREE.PointLight(0x00d2ff, 0.4, 60);
     rimLightLeft.position.set(-25, 5, 5);
     scene.add(rimLightLeft);
 
-    // Rim Fill Light Right (Pink)
-    const rimLightRight = new THREE.PointLight(0xff00aa, 0.3, 60);
+    // Rim Fill Light Right (Pink/Magenta)
+    const rimLightRight = new THREE.PointLight(0xd946ef, 0.3, 60);
     rimLightRight.position.set(25, -5, -5);
     scene.add(rimLightRight);
 
@@ -602,9 +602,9 @@ document.addEventListener("DOMContentLoaded", () => {
       metalness: 0.1,
       emissive: new THREE.Color(0x000000),
       bloomStrength: 0.15,
-      rimLeftColor: new THREE.Color(0x00f0ff),
+      rimLeftColor: new THREE.Color(0x00d2ff),
       rimLeftIntensity: 0.4,
-      rimRightColor: new THREE.Color(0xff00aa),
+      rimRightColor: new THREE.Color(0xd946ef),
       rimRightIntensity: 0.3,
       dirLightColor: new THREE.Color(0xfff2e6),
       dirLightIntensity: 1.0
@@ -641,7 +641,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Emissive exhaust plume
     const exhaustMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00f0ff
+      color: 0x00d2ff
     });
 
     window.a380Materials = {
@@ -652,6 +652,127 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const navLights = [];
     const fans = [];
+
+    // --- Procedural Fallback Airplane Builder ---
+    const buildProceduralAirplane = () => {
+      const group = new THREE.Group();
+
+      // Ensure transparent opacity for background silhouette aesthetic
+      fuselageMaterial.transparent = true;
+      fuselageMaterial.opacity = 0.22;
+      windshieldMaterial.transparent = true;
+      windshieldMaterial.opacity = 0.45;
+      engineMaterial.transparent = true;
+      engineMaterial.opacity = 0.25;
+
+      // Fuselage (Cylinder)
+      const fuselageGeom = new THREE.CylinderGeometry(1.2, 0.9, 14, 16);
+      fuselageGeom.rotateX(Math.PI / 2);
+      const fuselageMesh = new THREE.Mesh(fuselageGeom, fuselageMaterial);
+      fuselageMesh.castShadow = true;
+      fuselageMesh.receiveShadow = true;
+      group.add(fuselageMesh);
+
+      // Cockpit Nose (Cone)
+      const noseGeom = new THREE.ConeGeometry(1.2, 3, 16);
+      noseGeom.rotateX(Math.PI / 2);
+      noseGeom.translate(0, 0, 8.5);
+      const noseMesh = new THREE.Mesh(noseGeom, fuselageMaterial);
+      noseMesh.castShadow = true;
+      noseMesh.receiveShadow = true;
+      group.add(noseMesh);
+
+      // Cockpit Windshield
+      const windshieldGeom = new THREE.BoxGeometry(1.3, 0.6, 1.2);
+      const windshieldMesh = new THREE.Mesh(windshieldGeom, windshieldMaterial);
+      windshieldMesh.position.set(0, 0.6, 7.2);
+      windshieldMesh.rotation.x = -Math.PI / 6;
+      group.add(windshieldMesh);
+
+      // Tail Cone
+      const tailConeGeom = new THREE.ConeGeometry(0.9, 3, 16);
+      tailConeGeom.rotateX(-Math.PI / 2);
+      tailConeGeom.translate(0, 0, -8.5);
+      const tailConeMesh = new THREE.Mesh(tailConeGeom, fuselageMaterial);
+      tailConeMesh.castShadow = true;
+      tailConeMesh.receiveShadow = true;
+      group.add(tailConeMesh);
+
+      // Main Wings (Left and Right - Swept Back)
+      const leftWingGeom = new THREE.BoxGeometry(8, 0.15, 3);
+      leftWingGeom.translate(-4, 0, -0.5);
+      const leftWing = new THREE.Mesh(leftWingGeom, fuselageMaterial);
+      leftWing.position.set(0, -0.2, 0);
+      leftWing.rotation.y = -Math.PI / 5;
+      leftWing.rotation.z = Math.PI / 24;
+      leftWing.castShadow = true;
+      group.add(leftWing);
+
+      const rightWingGeom = new THREE.BoxGeometry(8, 0.15, 3);
+      rightWingGeom.translate(4, 0, -0.5);
+      const rightWing = new THREE.Mesh(rightWingGeom, fuselageMaterial);
+      rightWing.position.set(0, -0.2, 0);
+      rightWing.rotation.y = Math.PI / 5;
+      rightWing.rotation.z = -Math.PI / 24;
+      rightWing.castShadow = true;
+      group.add(rightWing);
+
+      // Horizontal Stabilizers (Rear elevator fins)
+      const leftStabGeom = new THREE.BoxGeometry(3, 0.1, 1.5);
+      leftStabGeom.translate(-1.5, 0, -0.2);
+      const leftStab = new THREE.Mesh(leftStabGeom, fuselageMaterial);
+      leftStab.position.set(0, 0.2, -7.2);
+      leftStab.rotation.y = -Math.PI / 6;
+      leftStab.castShadow = true;
+      group.add(leftStab);
+
+      const rightStabGeom = new THREE.BoxGeometry(3, 0.1, 1.5);
+      rightStabGeom.translate(1.5, 0, -0.2);
+      const rightStab = new THREE.Mesh(rightStabGeom, fuselageMaterial);
+      rightStab.position.set(0, 0.2, -7.2);
+      rightStab.rotation.y = Math.PI / 6;
+      rightStab.castShadow = true;
+      group.add(rightStab);
+
+      // Vertical Stabilizer (Tail fin)
+      const finGeom = new THREE.BoxGeometry(0.15, 3.5, 2.5);
+      finGeom.translate(0, 1.75, -0.5);
+      const fin = new THREE.Mesh(finGeom, fuselageMaterial);
+      fin.position.set(0, 0.9, -7.2);
+      fin.rotation.x = Math.PI / 10;
+      fin.castShadow = true;
+      group.add(fin);
+
+      // Jet Engines (Underwing)
+      const leftEngineGeom = new THREE.CylinderGeometry(0.55, 0.45, 2.8, 12);
+      leftEngineGeom.rotateX(Math.PI / 2);
+      const leftEngine = new THREE.Mesh(leftEngineGeom, engineMaterial);
+      leftEngine.position.set(-3.2, -0.8, 0.5);
+      leftEngine.castShadow = true;
+      group.add(leftEngine);
+
+      const rightEngineGeom = new THREE.CylinderGeometry(0.55, 0.45, 2.8, 12);
+      rightEngineGeom.rotateX(Math.PI / 2);
+      const rightEngine = new THREE.Mesh(rightEngineGeom, engineMaterial);
+      rightEngine.position.set(3.2, -0.8, 0.5);
+      rightEngine.castShadow = true;
+      group.add(rightEngine);
+
+      // Engine Exhaust Plumes
+      const exhaustGeom = new THREE.CylinderGeometry(0.4, 0.4, 0.2, 12);
+      exhaustGeom.rotateX(Math.PI / 2);
+      const leftExhaust = new THREE.Mesh(exhaustGeom, exhaustMaterial);
+      leftExhaust.position.set(-3.2, -0.8, -0.9);
+      group.add(leftExhaust);
+
+      const rightExhaust = new THREE.Mesh(exhaustGeom, exhaustMaterial);
+      rightExhaust.position.set(3.2, -0.8, -0.9);
+      group.add(rightExhaust);
+
+      // Scale to fit nicely as a background silhouette
+      group.scale.set(1.4, 1.4, 1.4);
+      return group;
+    };
 
     // --- GLTF Loading (No procedural geometry creation) ---
     const loader = new THREE.GLTFLoader();
@@ -692,7 +813,10 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       undefined,
       (err) => {
-        console.warn("A380 model file 'a380.glb' not found or failed to load. Waiting for user to provide the file.", err);
+        console.warn("A380 model file 'a380.glb' not found or failed to load. Using procedural jet model fallback.", err);
+        const fallbackAirplane = buildProceduralAirplane();
+        airplaneGroup.add(fallbackAirplane);
+        window.a380Model = fallbackAirplane;
       }
     );
 
