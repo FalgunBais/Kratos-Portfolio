@@ -10,7 +10,7 @@
   --gold: #f59e0b;         /* Caution/alert amber warning */
   --green: #10b981;        /* Cockpit PFD/HUD green standard */
   --text-light: #f8fafc;   /* Crisp white instrument readings */
-  --text-dim: #94a3b8;     /* Soft slate grey labels */
+  --text-dim: #cbd5e1;     /* High contrast cool slate grey labels */
 }
 
 *,
@@ -26,10 +26,11 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, #e0f2fe 0%, #38bdf8 15%, #0284c7 40%, #1e3a8a 65%, #0f172a 85%, #090d16 100%);
+  background: linear-gradient(180deg, #c6e5fc 0%, #38bdf8 15%, #0284c7 40%, #1e3a8a 65%, #0f172a 85%, #090d16 100%);
   color: var(--text-light);
   font-family: 'Montserrat', sans-serif;
   font-size: 17px;
+  font-weight: 500;
   line-height: 1.65;
   overflow-x: hidden;
   min-height: 100vh;
@@ -193,25 +194,29 @@ body::before {
 }
 
 .hud-hp-label {
-  color: var(--green);
-  font-size: 13px;
+  color: #10b981;
+  font-size: 15.5px;
   font-weight: 900;
+  text-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
 }
 
 .hud-armor-label {
-  color: var(--cyan);
-  font-size: 13px;
+  color: #00d2ff;
+  font-size: 15.5px;
   font-weight: 900;
+  text-shadow: 0 0 6px rgba(0, 210, 255, 0.4);
 }
 
 .hud-telemetry {
-  color: var(--text-light);
+  color: #ffffff;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 14px;
-  margin-left: 4px;
-  min-width: 65px;
+  font-size: 17px;
+  font-weight: 700;
+  margin-left: 6px;
+  min-width: 75px;
   display: inline-block;
-  text-shadow: 0 0 4px var(--text-light);
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.5), 0 2px 4px rgba(10, 14, 23, 0.4);
 }
 
 .hud-hp-track, .hud-armor-track {
@@ -330,6 +335,8 @@ body::before {
   justify-content: center;
   text-align: center;
   position: relative;
+  /* Dark radial gradient centered behind text for contrast, keeping clean sky blue edges */
+  background: radial-gradient(circle at center, rgba(10, 14, 23, 0.28) 0%, rgba(10, 14, 23, 0.05) 60%, transparent 100%);
 }
 
 /* Premium Airbus A380 Centerpiece Container */
@@ -422,14 +429,17 @@ body::before {
 .aviator-title {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  font-size: 54px;
-  color: #ffffff;
+  font-size: 56px;
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 50%, #f8fafc 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   position: relative;
   line-height: 1.2;
-  letter-spacing: 4px;
+  letter-spacing: 5px;
   text-transform: uppercase;
   z-index: 1;
-  text-shadow: 0 0 15px rgba(0, 210, 255, 0.4), 0 2px 4px rgba(10, 14, 23, 0.5);
+  filter: drop-shadow(0 4px 6px rgba(10, 14, 23, 0.6)) drop-shadow(0 0 12px rgba(0, 210, 255, 0.55));
 }
 
 .aviator-title::before {
@@ -448,14 +458,15 @@ body::before {
 
 .vice-city-script {
   font-family: 'Share Tech Mono', monospace;
+  font-weight: 700;
   font-size: 28px;
-  color: var(--cyan);
-  text-shadow: 0 0 15px var(--cyan);
+  color: #00d8ff;
+  text-shadow: 0 0 12px rgba(0, 216, 255, 0.6), 0 2px 4px rgba(10, 14, 23, 0.5);
   transform: rotate(-2deg);
   margin-top: 5px;
   margin-bottom: 24px;
   z-index: 1;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
   text-transform: uppercase;
 }
 
@@ -463,11 +474,13 @@ body::before {
 
 .hero-subtitle {
   font-family: 'Montserrat', sans-serif;
-  font-size: 18px;
-  color: var(--text-dim);
+  font-size: 19px;
+  font-weight: 600;
+  color: #ffffff;
   min-height: 40px;
   margin-top: 16px;
   z-index: 1;
+  text-shadow: 0 2px 8px rgba(10, 14, 23, 0.5);
 }
 
 .cursor {
@@ -481,10 +494,12 @@ body::before {
 
 .scroll-hint {
   margin-top: 48px;
-  color: var(--text-dim);
+  color: var(--cyan);
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 13.5px;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px rgba(10, 14, 23, 0.5);
   animation: blink 2s ease infinite;
 }
 
@@ -505,23 +520,23 @@ body::before {
 .level-number {
   display: block;
   font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  font-size: 15px;
+  font-weight: 700;
+  font-size: 17.5px;
   color: var(--magenta);
   letter-spacing: 4px;
   margin-bottom: 12px;
-  text-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
+  text-shadow: 0 0 10px rgba(217, 70, 239, 0.6), 0 2px 4px rgba(10, 14, 23, 0.4);
 }
 
 .level-header h2 {
   font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
+  font-weight: 700;
   font-size: 32px;
   color: var(--cyan);
   text-transform: uppercase;
   letter-spacing: 2px;
   line-height: 1.4;
-  text-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+  text-shadow: 0 0 12px rgba(0, 210, 255, 0.6), 0 2px 4px rgba(10, 14, 23, 0.4);
 }
 
 .edu-card {
@@ -771,10 +786,11 @@ body::before {
 .heist-header {
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  font-size: 13px;
-  color: var(--text-dim);
+  font-size: 15.5px;
+  color: var(--cyan);
   letter-spacing: 2px;
   margin-bottom: 4px;
+  text-shadow: 0 2px 4px rgba(10, 14, 23, 0.4);
 }
 
 .heist-payout {
@@ -815,11 +831,12 @@ body::before {
 .boss-tech {
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--cyan);
   display: block;
   margin-bottom: 12px;
   line-height: 1.4;
+  text-shadow: 0 0 6px rgba(0, 210, 255, 0.4);
 }
 
 .boss-card-front p {
@@ -838,9 +855,10 @@ body::before {
 .boss-card-back h3 {
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 18.5px;
   color: var(--cyan);
   line-height: 1.4;
+  text-shadow: 0 0 6px rgba(0, 210, 255, 0.4);
 }
 
 .boss-card-back p {
@@ -1076,11 +1094,12 @@ body::before {
 
 .bio-header {
   font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 16.5px;
   color: var(--cyan);
   margin-bottom: 12px;
   letter-spacing: 2px;
+  text-shadow: 0 0 8px rgba(0, 210, 255, 0.5), 0 2px 4px rgba(10, 14, 23, 0.4);
 }
 
 .bio-text {
@@ -1103,7 +1122,7 @@ body::before {
   gap: 8px;
   font-family: 'Orbitron', sans-serif;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 15px;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.4);
   transition: border-color 0.3s ease;
 }
