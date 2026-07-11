@@ -858,8 +858,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const portfolioSections = [
       { id: "terminalGate", state: "HERO" },
       { id: "gtaSplash", state: "HERO" },
-      { id: "education", state: "ABOUT" },
+      { id: "about", state: "ABOUT" },
       { id: "skills", state: "SKILLS" },
+      { id: "certifications", state: "CERTIFICATIONS" },
       { id: "projects", state: "PROJECTS" },
       { id: "experience", state: "EXPERIENCE" },
       { id: "contact", state: "CONTACT" }
@@ -1171,4 +1172,100 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   isolateHeroA380();
+
+  // --- Mobile HUD Navigation Logic ---
+  const initMobileNavigation = () => {
+    const btn = document.getElementById("mobileHudBtn");
+    const overlay = document.getElementById("mobileHudOverlay");
+    const panel = document.getElementById("mobileHudPanel");
+    const links = document.querySelectorAll(".mobile-hud-link");
+
+    if (!btn || !overlay || !panel) return;
+
+    // Toggle menu state
+    const toggleMenu = (open) => {
+      const isExpanded = btn.getAttribute("aria-expanded") === "true";
+      const shouldOpen = open !== undefined ? open : !isExpanded;
+
+      btn.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+      
+      if (shouldOpen) {
+        overlay.classList.add("is-active");
+        overlay.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden"; // Disable body scrolling
+        
+        // Add ripple animation class
+        btn.classList.add("ripple-active");
+        setTimeout(() => btn.classList.remove("ripple-active"), 400);
+
+        // Focus first link for keyboard access
+        if (links.length > 0) links[0].focus();
+      } else {
+        overlay.classList.remove("is-active");
+        overlay.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = ""; // Re-enable body scrolling
+      }
+    };
+
+    btn.addEventListener("click", () => toggleMenu());
+
+    // Click outside panel to close
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) {
+        toggleMenu(false);
+      }
+    });
+
+    // Close on links selection and smoothly scroll
+    links.forEach(link => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute("href");
+        const targetElement = document.querySelector(targetId);
+        
+        toggleMenu(false);
+
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    });
+
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("is-active")) {
+        toggleMenu(false);
+        btn.focus();
+      }
+    });
+
+    // High-performance Active Section Scroll Tracking
+    const sectionsToTrack = ["home", "about", "experience", "projects", "skills", "certifications", "resume", "contact"];
+    const sectionElements = sectionsToTrack.map(id => document.getElementById(id)).filter(el => el !== null);
+
+    const onScrollActiveNav = () => {
+      let activeId = "home";
+      const scrollPos = window.scrollY + window.innerHeight / 3;
+
+      sectionElements.forEach(el => {
+        if (scrollPos >= el.offsetTop) {
+          activeId = el.id;
+        }
+      });
+
+      links.forEach(link => {
+        const href = link.getAttribute("href");
+        if (href === `#${activeId}`) {
+          link.classList.add("is-active");
+        } else {
+          link.classList.remove("is-active");
+        }
+      });
+    };
+
+    window.addEventListener("scroll", onScrollActiveNav, { passive: true });
+    onScrollActiveNav(); // Run initially
+  };
+
+  initMobileNavigation();
 });

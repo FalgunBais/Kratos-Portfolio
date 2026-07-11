@@ -136,7 +136,7 @@
 
   <main id="main">
     <!-- HERO / START SCREEN -->
-    <section id="hero" class="section hero-section is-visible">
+    <section id="home" class="section hero-section is-visible">
       <div class="gta-vi-logo" aria-hidden="true" style="font-size: 220px; opacity: 0.04;">✈</div>
       <div class="hero-a380-container" aria-hidden="true">
         <img id="heroA380" src="a380_centerpiece.png" alt="Airbus A380 centerpiece" style="display: none;">
@@ -157,7 +157,7 @@
     </section>
 
     <!-- LEVEL 01: EDUCATION / ORIGIN STORY -->
-    <section id="education" class="section level-section">
+    <section id="about" class="section level-section">
       <div class="level-header">
         <span class="level-number">FLIGHT PLAN 01</span>
         <h2>Captain Credentials</h2>
@@ -169,7 +169,9 @@
           <p class="bio-text" style="margin-bottom: 20px;">
             B.Tech Computer Science student at VIT Amaravati with a strong foundation in cloud computing, artificial intelligence, and cybersecurity. AWS Cloud Architecture certified, with hands-on exposure to AI-driven systems, cloud deployments, and competitive hackathons. Adept at translating academic knowledge into functional, real-world technical projects.
           </p>
-          <a href="resume.pdf" class="btn-pixel btn-cyan" target="_blank" rel="noopener noreferrer">Download Resume</a>
+          <div id="resume" style="display: inline-block;">
+            <a href="resume.pdf" class="btn-pixel btn-cyan" target="_blank" rel="noopener noreferrer">Download Resume</a>
+          </div>
         </div>
 
         <!-- Education Card 1 -->
@@ -492,6 +494,46 @@
   <div class="hud-views" id="hudViews" aria-label="Profile views counter">
     <span class="hud-views-label">VIEWS</span>
     <span class="hud-views-count" id="viewsCount">0000</span>
+  </div>
+
+  <!-- Mobile Navigation Floating HUD Menu -->
+  <button class="mobile-hud-btn" id="mobileHudBtn" aria-label="Toggle aerospace navigation deck" aria-expanded="false">
+    <span class="mobile-hud-btn-inner">
+      <span class="hamburger-bar bar-1"></span>
+      <span class="hamburger-bar bar-2"></span>
+      <span class="hamburger-bar bar-3"></span>
+    </span>
+  </button>
+
+  <div class="mobile-hud-overlay" id="mobileHudOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Aerospace Navigation Deck">
+    <div class="mobile-hud-panel" id="mobileHudPanel">
+      <nav class="mobile-hud-nav" aria-label="Mobile Navigation Links">
+        <ul class="mobile-hud-menu-list">
+          <li style="--delay: 1"><a href="#home" class="mobile-hud-link"><span class="nav-icon">✈</span> Home</a></li>
+          <li style="--delay: 2"><a href="#about" class="mobile-hud-link"><span class="nav-icon">👨‍✈</span> About</a></li>
+          <li style="--delay: 3"><a href="#experience" class="mobile-hud-link"><span class="nav-icon">💼</span> Experience</a></li>
+          <li style="--delay: 4"><a href="#projects" class="mobile-hud-link"><span class="nav-icon">🚀</span> Projects</a></li>
+          <li style="--delay: 5"><a href="#skills" class="mobile-hud-link"><span class="nav-icon">🛠</span> Skills</a></li>
+          <li style="--delay: 6"><a href="#certifications" class="mobile-hud-link"><span class="nav-icon">🏆</span> Certifications</a></li>
+          <li style="--delay: 7"><a href="#resume" class="mobile-hud-link"><span class="nav-icon">📄</span> Resume</a></li>
+          <li style="--delay: 8"><a href="#contact" class="mobile-hud-link"><span class="nav-icon">📬</span> Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="mobile-hud-bottom">
+        <div class="mobile-hud-divider">━━━━━━━━━━━━━━━━━━</div>
+        <div class="mobile-hud-caption-name">Captain Falgun Singh Bais</div>
+        <div class="mobile-hud-caption-sub">Aspiring Airline Pilot • Software Engineer</div>
+        <div class="mobile-hud-divider">━━━━━━━━━━━━━━━━━━</div>
+        <div class="mobile-hud-socials">
+          <a href="https://github.com/FalgunBais" target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="social-icon">GitHub</a>
+          <a href="https://www.linkedin.com/in/falgun-bais/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="social-icon">LinkedIn</a>
+          <a href="https://instagram.com/falgun.bais" target="_blank" rel="noopener noreferrer" aria-label="Instagram" class="social-icon">Instagram</a>
+          <a href="mailto:falgunbais90@gmail.com" aria-label="Email" class="social-icon">Email</a>
+          <a href="resume.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume" class="social-icon">Resume</a>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="js/script.js"></script>
