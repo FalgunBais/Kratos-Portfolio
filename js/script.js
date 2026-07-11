@@ -1240,7 +1240,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // High-performance Active Section Scroll Tracking
-    const sectionsToTrack = ["home", "about", "experience", "projects", "skills", "certifications", "resume", "contact"];
+    const sectionsToTrack = ["home", "about", "skills", "certifications", "projects", "experience", "resume", "contact"];
     const sectionElements = sectionsToTrack.map(id => document.getElementById(id)).filter(el => el !== null);
 
     const onScrollActiveNav = () => {
@@ -1313,7 +1313,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Scrollspy section active highlight
-    const activeSections = ["home", "about", "projects", "experience", "skills", "certifications", "contact"];
+    const activeSections = ["home", "about", "skills", "certifications", "projects", "experience", "contact"];
     const sectionElements = activeSections.map(id => document.getElementById(id)).filter(el => el !== null);
     const desktopLinks = document.querySelectorAll(".hud-nav-link");
     const progressDots = document.querySelectorAll(".progress-dot");
