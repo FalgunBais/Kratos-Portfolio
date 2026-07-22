@@ -552,11 +552,10 @@ body {
   justify-content: center;
   text-align: center;
   position: relative;
-  /* Dark radial gradient centered behind text for contrast, keeping clean sky blue edges */
-  background: radial-gradient(circle at center, rgba(10, 14, 23, 0.28) 0%, rgba(10, 14, 23, 0.05) 60%, transparent 100%);
+  background: transparent;
 }
 
-/* Premium Airbus A380 Centerpiece Container */
+/* Premium Airbus A380 / SR-71 Centerpiece Container */
 .hero-a380-container {
   position: absolute;
   top: 50%;
@@ -575,9 +574,7 @@ body {
   width: 100%;
   height: auto;
   opacity: 0.95;
-  filter: 
-    drop-shadow(0 25px 30px rgba(10, 14, 23, 0.45)) 
-    drop-shadow(0 0 20px rgba(0, 210, 255, 0.25));
+  filter: drop-shadow(0 12px 24px rgba(0, 210, 255, 0.2));
   animation: a380Shimmer 8s ease-in-out infinite;
   transform: none; /* Visually stable centerline anchor */
   will-change: filter;
@@ -585,16 +582,10 @@ body {
 
 @keyframes a380Shimmer {
   0%, 100% {
-    filter: 
-      drop-shadow(0 25px 30px rgba(10, 14, 23, 0.45)) 
-      drop-shadow(0 0 20px rgba(0, 210, 255, 0.25))
-      brightness(1);
+    filter: drop-shadow(0 12px 24px rgba(0, 210, 255, 0.2)) brightness(1);
   }
   50% {
-    filter: 
-      drop-shadow(0 25px 30px rgba(10, 14, 23, 0.45)) 
-      drop-shadow(0 0 25px rgba(0, 210, 255, 0.35))
-      brightness(1.04); /* Subtle engine light shimmer/reflection pulse */
+    filter: drop-shadow(0 15px 30px rgba(0, 210, 255, 0.3)) brightness(1.03); /* Subtle engine light shimmer/reflection pulse */
   }
 }
 
@@ -657,7 +648,6 @@ body {
   text-align: center;
   user-select: none;
   pointer-events: none;
-  filter: drop-shadow(0 0 20px rgba(255, 0, 127, 0.4));
 }
 
 .aviator-title {
