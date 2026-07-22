@@ -26,7 +26,8 @@ html {
 }
 
 body {
-  background: linear-gradient(180deg, #c6e5fc 0%, #38bdf8 15%, #0284c7 40%, #1e3a8a 65%, #0f172a 85%, #090d16 100%);
+  background: linear-gradient(180deg, #bfe3fc 0%, #38bdf8 18%, #0284c7 42%, #1e3a8a 68%, #0f172a 88%, #090d16 100%);
+  background-attachment: fixed;
   color: var(--text-light);
   font-family: 'Montserrat', sans-serif;
   font-size: 17px;
@@ -89,12 +90,11 @@ body {
   pointer-events: none;
   will-change: transform, opacity, left;
   background: radial-gradient(circle at 50% 50%, 
-    rgba(255, 255, 255, 0.75) 0%, 
-    rgba(255, 255, 255, 0.35) 40%, 
-    rgba(255, 255, 255, 0) 70%
+    rgba(255, 255, 255, 0.45) 0%, 
+    rgba(255, 255, 255, 0.18) 45%, 
+    transparent 70%
   );
-  filter: blur(28px);
-  mix-blend-mode: screen; /* Smooth blending with blue sky gradient */
+  filter: blur(12px);
   transition: opacity 0.5s ease;
 }
 
@@ -102,11 +102,11 @@ body {
   width: 320px;
   height: 110px;
   background: radial-gradient(circle at 45% 45%, 
-    rgba(255, 255, 255, 0.85) 0%, 
-    rgba(255, 255, 255, 0.45) 35%, 
-    rgba(240, 248, 255, 0) 70%
+    rgba(255, 255, 255, 0.55) 0%, 
+    rgba(255, 255, 255, 0.22) 40%, 
+    transparent 70%
   );
-  filter: blur(20px);
+  filter: blur(10px);
 }
 
 .hud-bar {
@@ -638,11 +638,7 @@ body {
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   font-size: 280px;
-  color: transparent;
-  background: linear-gradient(135deg, var(--magenta) 0%, var(--gold) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  opacity: 0.12;
+  color: rgba(255, 255, 255, 0.03);
   z-index: 0;
   line-height: 1;
   text-align: center;
