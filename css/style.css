@@ -66,48 +66,7 @@ body {
 
 
 
-.clouds-bg-layer,
-.clouds-fg-layer {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
 
-.clouds-bg-layer {
-  z-index: 0; /* Behind plane centerpiece */
-}
-
-.clouds-fg-layer {
-  z-index: 2; /* In front of plane centerpiece */
-}
-
-.volumetric-cloud {
-  position: absolute;
-  width: 380px;
-  height: 140px;
-  border-radius: 50%;
-  pointer-events: none;
-  will-change: transform, opacity, left;
-  background: radial-gradient(circle at 50% 50%, 
-    rgba(255, 255, 255, 0.45) 0%, 
-    rgba(255, 255, 255, 0.18) 45%, 
-    transparent 70%
-  );
-  filter: blur(12px);
-  transition: opacity 0.5s ease;
-}
-
-.cloud-fg {
-  width: 320px;
-  height: 110px;
-  background: radial-gradient(circle at 45% 45%, 
-    rgba(255, 255, 255, 0.55) 0%, 
-    rgba(255, 255, 255, 0.22) 40%, 
-    transparent 70%
-  );
-  filter: blur(10px);
-}
 
 .hud-bar {
   position: fixed;
